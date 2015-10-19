@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" rowHeight="361" id="JV9-W3-F9N" customClass="PresentationCell" customModule="QlubbahApp" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="361"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JV9-W3-F9N" id="14S-89-Pzs">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="360"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1mm-46-bjl">
+                        <rect key="frame" x="-12" y="0.0" width="337" height="360"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="6pQ-LF-Wwv">
+                                <rect key="frame" x="20" y="6" width="304" height="246"/>
+                            </imageView>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="1uV-El-KaL">
+                                <rect key="frame" x="20" y="267" width="304" height="82"/>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="82" id="uxs-Y2-Mbx"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="MBH-eE-bZ2">
+                                    <size key="itemSize" width="80" height="80"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <connections>
+                                    <outlet property="dataSource" destination="-1" id="9R2-m1-VWt"/>
+                                    <outlet property="delegate" destination="-1" id="yXT-IJ-Zb0"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="1uV-El-KaL" firstAttribute="leading" secondItem="1mm-46-bjl" secondAttribute="leading" constant="20" id="18D-1Z-CBx"/>
+                            <constraint firstItem="6pQ-LF-Wwv" firstAttribute="top" secondItem="1mm-46-bjl" secondAttribute="top" constant="6" id="2Po-Mb-nMv"/>
+                            <constraint firstItem="1uV-El-KaL" firstAttribute="top" secondItem="6pQ-LF-Wwv" secondAttribute="bottom" constant="15" id="Dsa-c2-KON"/>
+                            <constraint firstAttribute="bottom" secondItem="1uV-El-KaL" secondAttribute="bottom" constant="11" id="H7d-zj-dta"/>
+                            <constraint firstAttribute="trailing" secondItem="6pQ-LF-Wwv" secondAttribute="trailing" constant="13" id="afg-Y2-Sxp"/>
+                            <constraint firstItem="6pQ-LF-Wwv" firstAttribute="leading" secondItem="1mm-46-bjl" secondAttribute="leading" constant="20" id="boe-6R-srP"/>
+                            <constraint firstAttribute="trailing" secondItem="1uV-El-KaL" secondAttribute="trailing" constant="13" id="hwe-50-BCk"/>
+                        </constraints>
+                    </view>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottomMargin" secondItem="1mm-46-bjl" secondAttribute="bottom" constant="-8" id="66n-ZJ-moL"/>
+                    <constraint firstItem="1mm-46-bjl" firstAttribute="leading" secondItem="14S-89-Pzs" secondAttribute="leadingMargin" constant="-20" id="KcZ-oA-QXc"/>
+                    <constraint firstItem="1mm-46-bjl" firstAttribute="top" secondItem="14S-89-Pzs" secondAttribute="topMargin" constant="-8" id="dyp-j7-Lkc"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="1mm-46-bjl" secondAttribute="trailing" constant="-13" id="j2b-3z-8qN"/>
+                </constraints>
+            </tableViewCellContentView>
+            <connections>
+                <outlet property="collectionView" destination="1uV-El-KaL" id="gGe-37-jtO"/>
+                <outlet property="img" destination="6pQ-LF-Wwv" id="sFr-fV-ksl"/>
+            </connections>
+            <point key="canvasLocation" x="392" y="83.5"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="bg" width="320" height="480"/>
+    </resources>
+</document>
