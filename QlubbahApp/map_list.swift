@@ -21,7 +21,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
     var allow = true
     var update_new = ""
     var selected_row = 0
- 
+    var allow_core_data_changes = false
     
     @IBOutlet weak var iView: UIView!
     @IBOutlet weak var aIndicator: UIActivityIndicatorView!
@@ -148,6 +148,8 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         request.returnsObjectsAsFaults = false
         
         core_data_result = try! context.executeFetchRequest(request)
+        allow_core_data_changes = true
+        
   
     }
    
@@ -227,7 +229,12 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
                     if let _result:NSArray = result{
                             self.clubs = _result
                             print("get_inf: результат получен - массив длины \(self.clubs.count)")
-                            self.compare_with_core_data()
+                        if (self.allow_core_data_changes){
+                           self.compare_with_core_data()
+                        }
+                        else {
+                            ("EXCEPTION: CORE DATA IS BUSY")
+                        }
                     }
                     else {
                         print("warning1: result is nil")
@@ -301,30 +308,38 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         }
         if update != self.update_new {
             SingletonObject.sharedInstance.delete_data("Place")
+            print("DELETED")
             self.add_data()
-            SingletonObject.sharedInstance.delete_data("Photo")
+            print("ADD")
+            SingletonObject.sharedInstance.delete_data("Photo") //здесь ошибка, я пытаюсь использовать core data с двух потоков в одном контексте походу
+            print("Photo_was_deleted")
             userDefaults.setObject(self.update_new, forKey: "update")
             SingletonObject.sharedInstance.about_update_ids = ""
+            //self._update()
             
         }
         else {
             self.change_data()
+            //self._update()
         }
         print("fetch_begin")
         dispatch_async(dispatch_get_main_queue()) {
-            self.fetch_request()
-            self.tableViewList.reloadData()
-            SingletonObject.sharedInstance.allow = true
+           self._update()
         }
+    }
+    func _update(){
+        self.fetch_request()
+        self.tableViewList.reloadData()
+        SingletonObject.sharedInstance.allow = true
     }
     
     
     //Добавление данных в core data, полученных из запроса. Вызывается в случае обновления на сервере. (Через админку)
     func add_data(){
         var obj_saved = 0
+        let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+        let context:NSManagedObjectContext = appDel.managedObjectContext
         for i in 0..<clubs.count {
-            let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-            let context:NSManagedObjectContext = appDel.managedObjectContext
             let place = NSEntityDescription.insertNewObjectForEntityForName("Place", inManagedObjectContext: context)
             
             if let cN :AnyObject? = (clubs[i])["id"]{
@@ -390,21 +405,34 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
     }
    
     // Изменении легких метаданных. Вызывается в случае если обновлений на сервере не происходило.(Через админку)
-    func change_data(){
+    func change_data(){ print("start")
         let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+        print("start")
         let context:NSManagedObjectContext = appDel.managedObjectContext
+        print("start")
         let request = NSFetchRequest(entityName: "Place")
+        print("start")
         request.returnsObjectsAsFaults = false
-         do {
+        print("start")
+         do { print("start")
             let result:NSArray = try context.executeFetchRequest(request)
-            for i in 0..<result.count {
-                result[i].setValue((clubs[i]["likes"])!?.integerValue, forKey: "likes");
+            print("start")
+            for i in 0..<result.count { print((clubs[i]["likes"])!?.integerValue)
+                if (result[i].valueForKey("likes") != nil && (clubs[i]["likes"])!?.integerValue != nil ){
+                    result[i].setValue((clubs[i]["likes"])!?.integerValue, forKey: "likes");
+                }
+                else {
+                    print("errorr!!!!!")
+                }
+                
             }
+            print("start")
         }    catch {
-                print("error8: could not load any Objective-C class information from the dyld shared cache. This will significantly reduce the quality of type information available.")
+                print("error8: fetch error")
         }
         
         do {
+            print("start")
             try context.save()
             print("change_data: Данные изменены успешно")
         } catch _ { print ("error4: Can't save object to core data")}
@@ -442,6 +470,10 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         print("present location : \(newLocation.coordinate.latitude), \(newLocation.coordinate.longitude)")
     }
 
+    @IBAction func about_from_map(sender: AnyObject) {
+        performSegueWithIdentifier("about", sender: nil)
+        
+    }
  
     func init_map(){
         locationManager = CLLocationManager()
@@ -515,6 +547,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
             if view.annotation!.isKindOfClass(MKUserLocation){
                 return
             }
+            self.selected_row = view.tag
             let customView = (NSBundle.mainBundle().loadNibNamed("SubView", owner: self, options: nil))[0] as! CustomSubView;
             
             var calloutViewFrame = customView.frame;
@@ -597,7 +630,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
             }
             svc.article = ((core_data_result[selected_row]).valueForKey("about") as? String)!
             svc.name = ((core_data_result[selected_row]).valueForKey("name") as? String)!
-            if (SingletonObject.sharedInstance.about_update_ids != "none" && SingletonObject.sharedInstance.about_update_ids.rangeOfString("," + svc.id + ",") == nil) {
+            if (SingletonObject.sharedInstance.about_update_ids.rangeOfString("none") == nil && SingletonObject.sharedInstance.about_update_ids.rangeOfString("," + svc.id + ",") == nil) {
                 //обнвоить картинки
                 svc.update = true               
             }

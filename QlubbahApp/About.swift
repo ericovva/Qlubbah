@@ -11,7 +11,7 @@ import CoreData
 class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDataSource{
 
     var comments_massive: NSArray = []
-  
+    var update_finished = false
     var images: [String] = []
     var images_src: String = ""
     var id = ""
@@ -84,11 +84,20 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
         
             if (id != "" && images_src != ""){
                 parse_string()
-                for i in 0..<images.count {
-                    add_photo(i)
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+                    for i in 0..<self.images.count {
+                        print("add new")
+                       self.add_photo(i)
                     
+                    }
+                    dispatch_async(dispatch_get_main_queue()) {
+                        self.fetch_request()
+                        self.update_finished = true
+                        self.tableView.reloadData()
+                        SingletonObject.sharedInstance.about_update_ids += "," + self.id + ","
+                        print("from background thread\(SingletonObject.sharedInstance.about_update_ids)")
+                    }
                 }
-                
             }
             else {
                 print("no image to show")
@@ -102,11 +111,16 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
         print(id)
         fetch_request()
         if (core_data_image_result.count == 0 || update ) {
+            print(update)
+            print(core_data_image_result.count)
             add_data()
-            SingletonObject.sharedInstance.about_update_ids += "," + id + ","
             print(SingletonObject.sharedInstance.about_update_ids)
-            fetch_request()
+
         }
+        else {
+            update_finished = true 
+        }
+        
         print("core data_result_count\(core_data_image_result.count)")
         
     }
@@ -239,9 +253,13 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
             cell0.collectionView.registerNib(nib, forCellWithReuseIdentifier: "CollectionViewCell")
             cell0.collectionView.delegate = self
             cell0.collectionView.dataSource = self
-            if let imgData = core_data_image_result[mainImage].valueForKey("img"){
-                cell0.img.image = UIImage(data: imgData as! NSData)
+            cell0.collectionView.reloadData()
+            if (update_finished){
+                if let imgData = core_data_image_result[mainImage].valueForKey("img"){
+                    cell0.img.image = UIImage(data: imgData as! NSData)
+                }
             }
+         
 
         }
         else {
@@ -278,7 +296,7 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) ->
         UICollectionViewCell {
-          
+            print(core_data_image_result.count)
             let cell: CollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("CollectionViewCell", forIndexPath: indexPath) as! CollectionViewCell
   
                 if let imgData = core_data_image_result[indexPath.row].valueForKey("img"){
@@ -385,20 +403,6 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
         task.resume()
         
     }
-    
-
-
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
 

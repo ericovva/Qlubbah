@@ -15,10 +15,8 @@ class PresentationCell: UITableViewCell , UICollectionViewDelegate, UICollection
  
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         print("awake")
-        //collectionView.dataSource = self
-        //collectionView.registerClass(CollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
+     
      
         
     }

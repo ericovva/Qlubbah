@@ -25,7 +25,7 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
                     <connections>
                         <segue destination="9Wy-Sy-cep" kind="custom" identifier="sw_rear" customClass="SWRevealViewControllerSegueSetController" id="lo5-rB-sig"/>
-                        <segue destination="Hse-bh-EOv" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegueSetController" id="MKe-1f-Fo6"/>
+                        <segue destination="LmK-sl-ek9" kind="custom" identifier="sw_front" customClass="SWRevealViewControllerSegueSetController" id="Eu7-yn-vcJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -1429,52 +1429,72 @@
                                 <rect key="frame" x="0.0" y="466" width="320" height="38"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="I2l-dS-1zb">
-                                        <rect key="frame" x="8" y="4" width="218" height="30"/>
+                                        <rect key="frame" x="0.0" y="4" width="74" height="30"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="218" id="ygh-j3-Em1"/>
+                                            <constraint firstAttribute="width" constant="74" id="Mgg-zr-Na1"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="14"/>
-                                        <state key="normal" title="Построить маршрут к заведению">
+                                        <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="13"/>
+                                        <state key="normal" title="Маршрут">
                                             <color key="titleColor" red="1" green="0.9431188371" blue="0.03330998541" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="get_route:" destination="O9Q-ak-sC6" eventType="touchUpInside" id="tHn-nw-i55"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vmw-Oj-rtF">
-                                        <rect key="frame" x="274" y="9" width="38" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vmw-Oj-rtF">
+                                        <rect key="frame" x="286" y="10" width="26" height="21"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="38" id="jwE-Rk-vQK"/>
+                                            <constraint firstAttribute="width" constant="26" id="l4t-A6-Wbb"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9lY-ba-JlR">
-                                        <rect key="frame" x="234" y="-2" width="86" height="41"/>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="like" translatesAutoresizingMaskIntoConstraints="NO" id="1CK-ni-mLN">
+                                        <rect key="frame" x="255" y="4" width="30" height="30"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="YmD-A2-6wn"/>
+                                            <constraint firstAttribute="width" constant="30" id="bqB-wx-KYW"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sWF-cQ-dLz">
+                                        <rect key="frame" x="73" y="5" width="174" height="30"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <state key="normal" title="Подробнее о заведении">
+                                            <color key="titleColor" red="1" green="0.9431188371" blue="0.03330998541" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="about_from_map:" destination="O9Q-ak-sC6" eventType="touchUpInside" id="kUg-tl-cgQ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9lY-ba-JlR">
+                                        <rect key="frame" x="245" y="-2" width="75" height="41"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="75" id="UBO-ap-269"/>
+                                        </constraints>
                                         <connections>
                                             <action selector="like_button:" destination="O9Q-ak-sC6" eventType="touchUpInside" id="Iic-RH-eXv"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="like" translatesAutoresizingMaskIntoConstraints="NO" id="1CK-ni-mLN">
-                                        <rect key="frame" x="239" y="1" width="35" height="35"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="35" id="L1C-ES-3Pw"/>
-                                            <constraint firstAttribute="height" constant="35" id="icH-YY-exk"/>
-                                        </constraints>
-                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
-                                    <constraint firstItem="Vmw-Oj-rtF" firstAttribute="top" secondItem="a5d-EU-006" secondAttribute="top" constant="9" id="6bg-8W-LcZ"/>
+                                    <constraint firstItem="Vmw-Oj-rtF" firstAttribute="top" secondItem="a5d-EU-006" secondAttribute="top" constant="10" id="5gN-zL-s3a"/>
+                                    <constraint firstAttribute="bottom" secondItem="9lY-ba-JlR" secondAttribute="bottom" constant="-1" id="80m-JS-fym"/>
+                                    <constraint firstItem="I2l-dS-1zb" firstAttribute="leading" secondItem="a5d-EU-006" secondAttribute="leading" id="G7k-1H-nCM"/>
                                     <constraint firstAttribute="height" constant="38" id="LuQ-cs-gwE"/>
-                                    <constraint firstAttribute="trailing" secondItem="Vmw-Oj-rtF" secondAttribute="trailing" constant="8" id="Yey-4o-v4m"/>
-                                    <constraint firstItem="I2l-dS-1zb" firstAttribute="top" secondItem="a5d-EU-006" secondAttribute="top" constant="4" id="dhv-B7-YcI"/>
-                                    <constraint firstAttribute="bottom" secondItem="1CK-ni-mLN" secondAttribute="bottom" constant="2" id="drN-bd-Eje"/>
-                                    <constraint firstItem="Vmw-Oj-rtF" firstAttribute="leading" secondItem="1CK-ni-mLN" secondAttribute="trailing" id="mX5-bH-X7z"/>
-                                    <constraint firstAttribute="bottom" secondItem="Vmw-Oj-rtF" secondAttribute="bottom" constant="8" id="s9v-Gg-kcJ"/>
-                                    <constraint firstAttribute="bottom" secondItem="I2l-dS-1zb" secondAttribute="bottom" constant="4" id="wML-ev-SIQ"/>
-                                    <constraint firstItem="I2l-dS-1zb" firstAttribute="leading" secondItem="a5d-EU-006" secondAttribute="leading" constant="8" id="yZI-v7-BIh"/>
+                                    <constraint firstItem="sWF-cQ-dLz" firstAttribute="top" secondItem="a5d-EU-006" secondAttribute="top" constant="5" id="NCm-J6-oJ6"/>
+                                    <constraint firstAttribute="trailing" secondItem="9lY-ba-JlR" secondAttribute="trailing" id="Nif-D9-hoJ"/>
+                                    <constraint firstItem="9lY-ba-JlR" firstAttribute="leading" secondItem="sWF-cQ-dLz" secondAttribute="trailing" constant="-2" id="OnW-y9-dPD"/>
+                                    <constraint firstItem="9lY-ba-JlR" firstAttribute="top" secondItem="a5d-EU-006" secondAttribute="top" constant="-2" id="QOv-L1-K2M"/>
+                                    <constraint firstItem="I2l-dS-1zb" firstAttribute="top" secondItem="a5d-EU-006" secondAttribute="top" constant="4" id="SeZ-Mf-Va1"/>
+                                    <constraint firstAttribute="bottom" secondItem="I2l-dS-1zb" secondAttribute="bottom" constant="4" id="eQN-h8-E9i"/>
+                                    <constraint firstItem="1CK-ni-mLN" firstAttribute="leading" secondItem="sWF-cQ-dLz" secondAttribute="trailing" constant="8" id="l2u-6Y-Rh2"/>
+                                    <constraint firstItem="1CK-ni-mLN" firstAttribute="top" secondItem="a5d-EU-006" secondAttribute="top" constant="4" id="lqj-e6-G95"/>
+                                    <constraint firstAttribute="bottom" secondItem="Vmw-Oj-rtF" secondAttribute="bottom" constant="7" id="nsj-XG-Ked"/>
+                                    <constraint firstItem="sWF-cQ-dLz" firstAttribute="leading" secondItem="I2l-dS-1zb" secondAttribute="trailing" constant="-1" id="rfs-ow-lYl"/>
+                                    <constraint firstItem="Vmw-Oj-rtF" firstAttribute="leading" secondItem="1CK-ni-mLN" secondAttribute="trailing" constant="1" id="uwM-w5-c3Y"/>
+                                    <constraint firstAttribute="bottom" secondItem="sWF-cQ-dLz" secondAttribute="bottom" constant="3" id="x65-e3-xc9"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -1789,7 +1809,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gkU-jA-GcO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1475" y="766"/>
+            <point key="canvasLocation" x="-1247" y="766"/>
         </scene>
     </scenes>
     <resources>
@@ -1819,7 +1839,7 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="lo5-rB-sig"/>
+        <segue reference="Eu7-yn-vcJ"/>
         <segue reference="Tyv-LV-HcW"/>
-        <segue reference="lnl-lh-Pzq"/>
     </inferredMetricsTieBreakers>
 </document>
