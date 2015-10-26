@@ -11,6 +11,7 @@ import UIKit
 class PresentationCell: UITableViewCell , UICollectionViewDelegate, UICollectionViewDataSource{
     @IBOutlet weak var img: UIImageView!
 
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var collectionView: UICollectionView!
  
     override func awakeFromNib() {

@@ -22,11 +22,15 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
     var update_new = ""
     var selected_row = 0
     var allow_core_data_changes = false
+    var changing = false
+    var any_active_annotations = false
+    
     
     @IBOutlet weak var iView: UIView!
     @IBOutlet weak var aIndicator: UIActivityIndicatorView!
     @IBOutlet weak var mapView: MKMapView!
 
+    @IBOutlet weak var sort_button: UIBarButtonItem!
    
     @IBOutlet weak var seg_control: UISegmentedControl!
     @IBOutlet weak var tableViewList: UITableView!
@@ -34,16 +38,29 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
 
         switch(sender.selectedSegmentIndex){
         case 0:
-            
+                sort_button.tintColor = UIColor.clearColor()
+                sort_button.enabled = false
                 if (!map_init){
                     init_map()
                     map_init = true
                 }
+                if any_active_annotations {
+                    self.map_footer_panel.hidden = false
+                }
+                self.locationManager.startUpdatingLocation()
+                self.current_location_button.hidden = false
                 tableViewList.hidden = true ;
                 mapView.hidden = false
             
         default:
+            sort_button.tintColor = UIColor.yellowColor()
+            sort_button.enabled = true
+            if (map_init){
+                self.locationManager.stopUpdatingLocation();
+            }
             
+                self.current_location_button.hidden = true
+                 self.map_footer_panel.hidden = true
                  tableViewList.hidden = false;
                  mapView.hidden = true
             
@@ -80,6 +97,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
             menuButton.target = self.revealViewController()
             menuButton.action = "revealToggle:"
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
+            self.view.addGestureRecognizer(self.revealViewController().tapGestureRecognizer())
         }
         else {
             print("error1: revealViewController == nil")
@@ -147,7 +165,9 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         
         request.returnsObjectsAsFaults = false
         
-        core_data_result = try! context.executeFetchRequest(request)
+        let result = try! context.executeFetchRequest(request)
+        core_data_result = result
+        print("copeid core_data_result")
         allow_core_data_changes = true
         
   
@@ -300,7 +320,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
     }
     //Выбор действия в зависимости от информации из запроса get_iinf2 (либо полное обновление core data, либо обновление метаинформации)
     func compare_with_core_data(){
-        
+        self.changing = true
         var update: String = ""
         let userDefaults = NSUserDefaults.standardUserDefaults()
         if let _update = userDefaults.stringForKey("update"){
@@ -328,9 +348,12 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         }
     }
     func _update(){
+        changing = false
         self.fetch_request()
         self.tableViewList.reloadData()
         SingletonObject.sharedInstance.allow = true
+        mapView.removeAnnotations(mapView.annotations)
+        self.init_map()
     }
     
     
@@ -445,6 +468,9 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
     
     @IBOutlet weak var map_footer_panel: UIView!
     @IBAction func like_button(sender: AnyObject) {
+        print("SSSSSSSSSSSS\(club_route_id)")
+        SingletonObject.sharedInstance.like_club(selected_row,label: like_label,img: like_img,club_id: ((core_data_result[selected_row]).valueForKey("id") as? String)!)
+        fetch_request()
     }
     @IBOutlet weak var like_img: UIImageView!
     @IBOutlet weak var like_label: UILabel!
@@ -496,25 +522,37 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         mapView.mapType = MKMapType(rawValue: 0)!
         mapView.userTrackingMode = MKUserTrackingMode(rawValue: 2)!
         
-        
-    
-        for i in 0..<self.core_data_result.count{
-            
-            self.coords = CLLocationCoordinate2D(latitude:
-                (core_data_result[i].valueForKey("x") as! NSString).doubleValue, longitude: (core_data_result[i].valueForKey("y") as! NSString).doubleValue)
-            
-            
-            let pointAnnotation:MKPointAnnotation = MKPointAnnotation()
-            pointAnnotation.coordinate = self.coords!
-            pointAnnotation.title = "\(i)"
-            self.mapView?.addAnnotation(pointAnnotation)
-            self.mapView?.centerCoordinate = self.coords!
-            
+        if (!changing){ //жесткий костыль
+            for i in 0..<self.core_data_result.count{
+                
+                self.coords = CLLocationCoordinate2D(latitude:
+                    (core_data_result[i].valueForKey("x") as! NSString).doubleValue, longitude: (core_data_result[i].valueForKey("y") as! NSString).doubleValue)
+                
+                
+                let pointAnnotation:MKPointAnnotation = MKPointAnnotation()
+                pointAnnotation.coordinate = self.coords!
+                pointAnnotation.title = "\(i)"
+                self.mapView?.addAnnotation(pointAnnotation)
+                self.mapView?.centerCoordinate = self.coords!
+                
+            }
         }
+    
+        
+        
         
         
         
     }
+    
+    
+    @IBOutlet weak var current_location_button: UIButton!
+    @IBAction func current_location_action(sender: AnyObject) {
+        mapView.userTrackingMode = MKUserTrackingMode(rawValue: 2)!
+        
+        //mapView.showsUserLocation = false //что она делает?? хз
+    }
+    
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
         let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
         renderer.strokeColor = UIColor.blueColor()
@@ -557,8 +595,17 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
             let cpa = view.annotation
             customView.name.text = core_data_result[view.tag].valueForKey("name") as? String
             customView.address.text = core_data_result[view.tag].valueForKey("place") as? String
+            customView.m_c.text = (core_data_result[view.tag]).valueForKey("male") as? String
+            customView.w_a.text = (core_data_result[view.tag]).valueForKey("age_female") as? String
+            customView.m_a.text = (core_data_result[view.tag]).valueForKey("age") as? String
+            customView.w_c.text = (core_data_result[view.tag]).valueForKey("female") as? String
+            customView.c.text = (core_data_result[view.tag]).valueForKey("people") as? String
+            if let imgData = core_data_result[view.tag].valueForKey("img"){
+                customView.bg.image = UIImage(data: imgData as! NSData)
+            }
+            like_label.text = String(((core_data_result[view.tag]).valueForKey("likes"))!)
             club_route_id = (core_data_result[view.tag].valueForKey("place") as? String)!
-            
+          
             view.addSubview(customView)
             view.bringSubviewToFront(customView)
             //zoom map to show callout
@@ -568,9 +615,11 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
             let newRegion = MKCoordinateRegion(center:cpa!.coordinate, span: MKCoordinateSpanMake(spanX, spanY))
             self.mapView?.setRegion(newRegion, animated: true)
             self.map_footer_panel.hidden = false
+            self.any_active_annotations = true
     }
     func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
-        self.map_footer_panel.hidden = true 
+        self.map_footer_panel.hidden = true
+        self.any_active_annotations = false
         view.subviews.forEach({ $0.removeFromSuperview() })
     }
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
@@ -616,9 +665,20 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         selected_row = indexPath.row
+        let selectedCell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        selectedCell.contentView.backgroundColor = UIColor(
+            red: CGFloat( 255 / 255.0),
+            green: CGFloat(255 / 255.0),
+            blue: CGFloat( 255 / 255.0),
+            alpha: CGFloat(1.0)
+        )
         performSegueWithIdentifier("about", sender: nil)
     }
+    
+   
+    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        
         if segue.identifier == "about" {
             let svc = segue.destinationViewController as! About;
             svc.id = ((core_data_result[selected_row]).valueForKey("id") as? String)!
@@ -630,6 +690,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
             }
             svc.article = ((core_data_result[selected_row]).valueForKey("about") as? String)!
             svc.name = ((core_data_result[selected_row]).valueForKey("name") as? String)!
+            svc.address = ((core_data_result[selected_row]).valueForKey("place") as? String)!
             if (SingletonObject.sharedInstance.about_update_ids.rangeOfString("none") == nil && SingletonObject.sharedInstance.about_update_ids.rangeOfString("," + svc.id + ",") == nil) {
                 //обнвоить картинки
                 svc.update = true               
@@ -645,6 +706,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         super.didReceiveMemoryWarning()
         
     }
+    
     
   
    

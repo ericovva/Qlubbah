@@ -1,18 +1,21 @@
 //
-//  ArticleCell.swift
+//  Comments.swift
 //  QlubbahApp
 //
-//  Created by Эрик on 16.10.15.
+//  Created by Эрик on 25.10.15.
 //  Copyright © 2015 qlubbah. All rights reserved.
 //
 
 import UIKit
 
-class ArticleCell: UITableViewCell {
+class Comments: UITableViewCell {
 
-    @IBOutlet weak var club_address: UILabel!
-    @IBOutlet weak var club_name: UILabel!
-    @IBOutlet weak var Article: UILabel!
+    @IBOutlet weak var l_name: UILabel!
+    @IBOutlet weak var l_date: UILabel!
+    @IBOutlet weak var r_name: UILabel!
+    @IBOutlet weak var comment: UILabel!
+  
+    @IBOutlet weak var r_date: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

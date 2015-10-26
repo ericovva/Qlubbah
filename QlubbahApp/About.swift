@@ -8,13 +8,15 @@
 
 import UIKit
 import CoreData
+import CoreImage
 class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDataSource{
-
+    var allow_to_send = true
     var comments_massive: NSArray = []
     var update_finished = false
     var images: [String] = []
     var images_src: String = ""
     var id = ""
+    var address = ""
     var update = true
     var core_data_image_result: NSArray = []
     var mainImage = 0;
@@ -143,6 +145,8 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
         tableView.registerNib(nib, forCellReuseIdentifier: "cell")
         nib = UINib(nibName: "Article", bundle: nil)
         tableView.registerNib(nib, forCellReuseIdentifier: "cell1")
+        nib = UINib(nibName: "Comments", bundle: nil)
+        tableView.registerNib(nib, forCellReuseIdentifier: "cell2")
         tableView.estimatedRowHeight = 44.0
         tableView.rowHeight = UITableViewAutomaticDimension
         
@@ -213,27 +217,44 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
     @IBOutlet weak var activeTextField: UITextView!
     @IBAction func send_comment(sender: AnyObject) {
         let userDef = NSUserDefaults.standardUserDefaults()
-        let _id = userDef.stringForKey("id")!
-        let _hash = userDef.stringForKey("hash")!
-        let _name = userDef.stringForKey("name")!
-        let urli:NSString = "http://qlubbah.ru/api.php?keys=1&action=comment&id=\(_id)&hash=\(_hash)&mes=\(activeTextField.text)&club_id=\(id)&name=\(_name)"
-        let urlStr : NSString = urli.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        if let searchURL : NSURL = NSURL(string: urlStr as String)! {
-            print(searchURL)
-            httpRequest(searchURL) {
-                (result: NSDictionary) in
-                dispatch_async(dispatch_get_main_queue()) {
-                    print(result)
-                    self.activeTextField.text = ""
-                    self.DismissKeyboard()
+        if (userDef.boolForKey("auth")){
+            
+            if (self.allow_to_send){
+                self.allow_to_send = false
+                
+                let _id = userDef.stringForKey("id")!
+                let _hash = userDef.stringForKey("hash")!
+                let _name = userDef.stringForKey("name")!
+                let urli:NSString = "http://qlubbah.ru/api.php?keys=1&action=comment&id=\(_id)&hash=\(_hash)&mes=\(activeTextField.text)&club_id=\(id)&name=\(_name)"
+                let urlStr : NSString = urli.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+                if let searchURL : NSURL = NSURL(string: urlStr as String)! {
+                    print(searchURL)
+                    httpRequest(searchURL) {
+                        (result: NSDictionary) in
+                        dispatch_async(dispatch_get_main_queue()) {
+                            print(result)
+                            self.activeTextField.text = ""
+                            self.DismissKeyboard()
+                            self.allow_to_send = true
+                            self.error_mess("Отзыв успешно отправлен! ", _message: "После прохождения модерации он появится на сайте.")
+                        }
+                    }
                 }
+                else {
+                    allow_to_send = true
+                    error_mess("Не удалось отправить отзыв.", _message: "Проверьте интернет соединение и повторите попытку.")
+                    dispatch_async(dispatch_get_main_queue()) {
+                        print("error")
+                    }
+                }
+                
+                
             }
         }
         else {
-            dispatch_async(dispatch_get_main_queue()) {
-                    print("error")
-            }
+            error_mess("Пожалуйста авторизуйтесь.", _message: "Вы можете оставлять отзывы только после авторизации. Если у вас нет аккаунта, зарегистрируйтесь. Процедура регистрации займет не более двух минут.")
         }
+        
     }
     
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
@@ -247,6 +268,7 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell0 = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! PresentationCell
         let cell1 = tableView.dequeueReusableCellWithIdentifier("cell1", forIndexPath: indexPath) as! ArticleCell
+        let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! Comments
         if (indexPath.row == 0){ tableView.rowHeight = self.view.frame.size.width + 40
             
             let nib = UINib(nibName: "CollectionViewCell", bundle: nil)
@@ -254,9 +276,13 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
             cell0.collectionView.delegate = self
             cell0.collectionView.dataSource = self
             cell0.collectionView.reloadData()
+            cell0.activityIndicator.hidden = false
+            cell0.activityIndicator.startAnimating()
             if (update_finished){
                 if let imgData = core_data_image_result[mainImage].valueForKey("img"){
                     cell0.img.image = UIImage(data: imgData as! NSData)
+                    cell0.activityIndicator.hidden = true
+                    cell0.activityIndicator.stopAnimating()
                 }
             }
          
@@ -267,24 +293,49 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
             tableView.rowHeight = UITableViewAutomaticDimension
             if (indexPath.row > 1){
                 if let tmp  = comments_massive[indexPath.row - 2]["comment"]{
-                    cell1.Article.text = tmp as? String
-                }
-                
+                    cell2.comment.text = tmp as? String
+                    if let tmp1  = comments_massive[indexPath.row - 2]["name"]{
+                        cell2.l_name.text = tmp1 as? String
+                        if let tmp2  = comments_massive[indexPath.row - 2]["time"]{
+                           cell2.l_date.text = tmp2 as? String
+                            let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+                            cell2.addGestureRecognizer(tap)
+                            
+                            return cell2
+                        }
+                     }
+                 }
             }
             else {
                 cell1.Article.text = article
+                cell1.club_name.text = name
+                cell1.club_address.text  = address
+                let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+                cell1.addGestureRecognizer(tap)
+                
+                return cell1
             }
             
             
-            let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
-            cell1.addGestureRecognizer(tap)
-
-            return cell1
+            
         }
         
         return cell0
     }
+    
+    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let selectedCell:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        selectedCell.contentView.backgroundColor = UIColor(
+            red: CGFloat( 255 / 255.0),
+            green: CGFloat(255 / 255.0),
+            blue: CGFloat( 255 / 255.0),
+            alpha: CGFloat(1.0)
+        )
 
+    }
+    
+    
+    
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
      
         return 1
@@ -300,7 +351,35 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
             let cell: CollectionViewCell = collectionView.dequeueReusableCellWithReuseIdentifier("CollectionViewCell", forIndexPath: indexPath) as! CollectionViewCell
   
                 if let imgData = core_data_image_result[indexPath.row].valueForKey("img"){
+                    
+                    
+                    
+//                    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+//                        let originalImage: UIImage  =  UIImage(data: imgData as! NSData)!
+//                        let ciContext = CIContext(options: nil)
+//                        let startImage = CIImage(image: originalImage)
+//                        let filter = CIFilter(name: "CIMaximumComponent")
+//                        filter!.setDefaults()
+//                        filter!.setValue(startImage, forKey: kCIInputImageKey)
+//                        let filteredImageData = filter!.valueForKey(kCIOutputImageKey) as! CIImage
+//                        let filteredImageRef = ciContext.createCGImage(filteredImageData, fromRect: filteredImageData.extent)
+//                        
+//                      
+//                        dispatch_async(dispatch_get_main_queue()) {
+//                            cell.img.image = UIImage(CGImage: filteredImageRef);
+//                        }
+//                    }
+                    if mainImage == indexPath.row {
+                        cell.view.hidden = true
+                        cell.img.layer.borderColor = UIColor.yellowColor().CGColor
+                        cell.img.layer.borderWidth = 2
+                    }
+                    else {
+                         cell.view.hidden = false
+                        cell.img.layer.borderWidth = 0
+                    }
                     cell.img.image = UIImage(data: imgData as! NSData)
+                    
                 }
             
             
@@ -309,8 +388,12 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         print("action")
         self.mainImage = indexPath.row
+        
         self.tableView.reloadData()
+        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
+        tableView.scrollToRowAtIndexPath(indexPath, atScrollPosition: UITableViewScrollPosition.Bottom, animated: true)
     }
+    
     
     
    
@@ -402,6 +485,12 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
         
         task.resume()
         
+    }
+    func error_mess(_title: String,_message: String){
+        let alert = UIAlertController(title: _title, message: _message, preferredStyle: UIAlertControllerStyle.Alert)
+        //alert.view.backgroundColor = UIColor.darkGrayColor()
+        alert.addAction(UIAlertAction(title: "Закрыть", style: UIAlertActionStyle.Default, handler: nil))
+        presentViewController(alert, animated: true, completion: nil)
     }
 
 }

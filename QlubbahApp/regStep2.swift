@@ -12,6 +12,7 @@ class regStep2: UIViewController {
     var name:String!
     var phone:String!
     var email:String!
+    var id_reg: Int!
     
     @IBAction func next(sender: AnyObject) {
         performSegueWithIdentifier("step3", sender: nil)
@@ -20,6 +21,8 @@ class regStep2: UIViewController {
         super.viewDidLoad()
         self.navigationController!.navigationBar.tintColor = UIColor.yellowColor()
         self.navigationController?.navigationBar.translucent = false
+                self.reg_pass.secureTextEntry = true
+                self.reg_pass1.secureTextEntry = true
         
       
         
@@ -31,8 +34,15 @@ class regStep2: UIViewController {
                 if let data_error: NSData = _data {
                     if let result = NSString(data: data_error, encoding: NSUTF8StringEncoding){
                         if let jsonData = result.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true){
-                            let jsonDict = (try! NSJSONSerialization.JSONObjectWithData(jsonData, options: [])) as! NSDictionary
-                            completion(result: jsonDict)                        }
+                            
+                            do {
+                                let jsonDict = (try NSJSONSerialization.JSONObjectWithData(jsonData, options: [])) as! NSDictionary
+                                completion(result: jsonDict)
+                            } catch _ {
+                                print(jsonData)
+                                print("error in JSON")
+                            }
+                        }
                         else {
                             print("error3: error in encoding jsonData")
                         }
@@ -63,15 +73,11 @@ class regStep2: UIViewController {
     @IBAction func next_2but(sender: UIBarButtonItem) {
         if(reg_pass.text! != "" && reg_pass1.text! != ""){
             if(reg_pass.text! == reg_pass1.text!){
-                var url_srt = "http://qlubbah.ru/api.php?action=reg&keys=1&phone="
-                url_srt += phone + "&name="
-                url_srt += name + "&email="
-                url_srt += email + "&pass="
-                url_srt += reg_pass.text! + "&pass1="
-                url_srt += reg_pass1.text!
-                print(url_srt);
-                if let url = NSURL(string: url_srt) {
-                    httpRequest(url) {
+                let st = phone + "&name=" + name + "&email=" + email + "&pass=" + reg_pass.text! + "&pass1=" + reg_pass1.text!
+                let url_srt: NSString = "http://qlubbah.ru/api.php?action=reg&keys=1&phone=\(st)"
+                let urlStr : NSString = url_srt.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+                if let searchURL : NSURL = NSURL(string: urlStr as String)! {
+                    httpRequest(searchURL) {
                         (result: NSDictionary) in
                         dispatch_async(dispatch_get_main_queue()) {
                             if let _result:NSDictionary = result{
@@ -80,9 +86,16 @@ class regStep2: UIViewController {
                                         self.error_mess("Ошибка",_message:ans as! String)
                                     }
                                 }else{
-                                    dispatch_async(dispatch_get_main_queue()) {
-                                        self.error_mess("Ошибка",_message:_result["id_reg"] as! String)
+                                    //dispatch_async(dispatch_get_main_queue()) {
+                                      //  self.error_mess("Ошибка",_message:_result["id_reg"] as! String)
+                                    //}
+                                    //print(_result["id_reg"])
+                                    if let tmp = _result["id_reg"]?.integerValue{
+                                        self.id_reg = tmp
+                                        self.performSegueWithIdentifier("step3", sender: nil)
                                     }
+                                    
+
                                 }
                             } else {
                                 print("warning1: result is nil")
@@ -109,6 +122,12 @@ class regStep2: UIViewController {
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return UIStatusBarStyle.LightContent;
+    }
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        if segue.identifier == "step3" {
+            let svc = segue.destinationViewController as! completeReg;
+            svc.id_reg = id_reg
+        }
     }
     
     

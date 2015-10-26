@@ -17,11 +17,19 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Qtl-h6-fX3">
                         <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
                     </imageView>
+                    <view alpha="0.65000000000000002" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E5P-Dp-P4Q">
+                        <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="E5P-Dp-P4Q" secondAttribute="bottom" id="C27-dF-fdz"/>
                 <constraint firstAttribute="trailing" secondItem="Qtl-h6-fX3" secondAttribute="trailing" id="NgF-Uz-0Mw"/>
+                <constraint firstItem="E5P-Dp-P4Q" firstAttribute="leading" secondItem="t2R-Ne-FUE" secondAttribute="leading" id="XMh-hn-DEz"/>
+                <constraint firstAttribute="trailing" secondItem="E5P-Dp-P4Q" secondAttribute="trailing" id="elf-JL-rLt"/>
+                <constraint firstItem="E5P-Dp-P4Q" firstAttribute="top" secondItem="t2R-Ne-FUE" secondAttribute="top" id="gS5-iN-qkJ"/>
                 <constraint firstAttribute="bottom" secondItem="Qtl-h6-fX3" secondAttribute="bottom" id="q8m-Jg-qKC"/>
                 <constraint firstItem="Qtl-h6-fX3" firstAttribute="leading" secondItem="t2R-Ne-FUE" secondAttribute="leading" id="qKA-Kj-H5i"/>
                 <constraint firstItem="Qtl-h6-fX3" firstAttribute="top" secondItem="t2R-Ne-FUE" secondAttribute="top" id="xST-Yb-Aa8"/>
@@ -29,6 +37,7 @@
             <size key="customSize" width="92" height="78"/>
             <connections>
                 <outlet property="img" destination="Qtl-h6-fX3" id="kxz-v5-SKm"/>
+                <outlet property="view" destination="E5P-Dp-P4Q" id="OOJ-Xf-4qW"/>
             </connections>
             <point key="canvasLocation" x="404" y="305"/>
         </collectionViewCell>

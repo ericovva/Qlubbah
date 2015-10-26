@@ -62,6 +62,25 @@ class Sort: UIViewController {
         bordering(c)
         bordering(wc)
         bordering(mc)
+        switch( SingletonObject.sharedInstance.sort ){
+            case "likes": l.backgroundColor = UIColor.yellowColor()
+                          l.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            case "people": c.backgroundColor = UIColor.yellowColor()
+                            c.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        case "female": bg.backgroundColor = UIColor.yellowColor()
+        bg.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        case "male": bm.backgroundColor = UIColor.yellowColor()
+        bm.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        case "age": mc.backgroundColor = UIColor.yellowColor()
+        mc.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        case "age_female": wc.backgroundColor = UIColor.yellowColor()
+        wc.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        case "people": c.backgroundColor = UIColor.yellowColor()
+        
+        c.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+            default: n.backgroundColor = UIColor.yellowColor()
+                     n.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+        }
 
         // Do any additional setup after loading the view.
     }

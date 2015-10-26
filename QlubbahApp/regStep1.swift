@@ -24,8 +24,20 @@ class regStep1: UIViewController {
             self.view.addGestureRecognizer(self.revealViewController().panGestureRecognizer())
         }
         self.navigationController?.navigationBar.translucent = false
+       
+        self.reg_email.keyboardType = UIKeyboardType.EmailAddress
+        self.reg_phone.keyboardType = UIKeyboardType.PhonePad
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
+        view.addGestureRecognizer(tap)
+
 
         
+
+        
+    }
+    func DismissKeyboard(){
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     func isValidEmail(testStr:String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -81,11 +93,13 @@ class regStep1: UIViewController {
         if(reg_email.text != "" && reg_name.text != "" && reg_phone.text != ""){
             if reg_phone.text!.characters.count == 10 {
                 if(isValidEmail(reg_email.text!)){
-                    var url_srt = "http://qlubbah.ru/api.php?action=phone_email_check&keys=1&phone="
-                    url_srt += reg_phone.text! + "&email=" + reg_email.text!;
-                    url_srt += "&name=" + reg_name.text! ;
-                    if let url = NSURL(string: url_srt) {
-                        httpRequest(url) {
+                    
+                    let st1 = (reg_phone.text! + "&email=" + reg_email.text!)
+                    let st2 = "&name=" + reg_name.text! ;
+                    let url_srt: NSString = "http://qlubbah.ru/api.php?action=phone_email_check&keys=1&phone=\(st1 + st2)"
+                    let urlStr : NSString = url_srt.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+                    if let searchURL : NSURL = NSURL(string: urlStr as String)! {
+                        httpRequest(searchURL) {
                             (result: NSDictionary) in
                             dispatch_async(dispatch_get_main_queue()) {
                                 if let _result:NSDictionary = result{
@@ -94,7 +108,7 @@ class regStep1: UIViewController {
                                             self.error_mess("Ошибка",_message:ans as! String)
                                         }
                                     }else{
-                                        
+                                        print(_result)
                                         self.performSegueWithIdentifier("step2", sender: nil)
                                     }
                                 } else {
@@ -102,6 +116,9 @@ class regStep1: UIViewController {
                                 }
                             }
                         }
+                    }
+                    else {
+                        print("dsadas")
                     }
                 } else {
                     dispatch_async(dispatch_get_main_queue()) {

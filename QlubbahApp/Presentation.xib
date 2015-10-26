@@ -18,7 +18,7 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1mm-46-bjl">
                         <rect key="frame" x="-12" y="0.0" width="337" height="360"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="6pQ-LF-Wwv">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6pQ-LF-Wwv">
                                 <rect key="frame" x="20" y="6" width="304" height="246"/>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="1uV-El-KaL">
@@ -38,6 +38,10 @@
                                     <outlet property="delegate" destination="-1" id="yXT-IJ-Zb0"/>
                                 </connections>
                             </collectionView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="rmq-gW-TON">
+                                <rect key="frame" x="150" y="110" width="37" height="37"/>
+                                <color key="color" red="1" green="0.94509803920000002" blue="0.043137254899999998" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -59,13 +63,11 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="activityIndicator" destination="rmq-gW-TON" id="n3b-qR-jUM"/>
                 <outlet property="collectionView" destination="1uV-El-KaL" id="gGe-37-jtO"/>
                 <outlet property="img" destination="6pQ-LF-Wwv" id="sFr-fV-ksl"/>
             </connections>
             <point key="canvasLocation" x="392" y="83.5"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <image name="bg" width="320" height="480"/>
-    </resources>
 </document>

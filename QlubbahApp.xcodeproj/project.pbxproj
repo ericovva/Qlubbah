@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		034144A91BDD4C0100482893 /* Comments.xib in Resources */ = {isa = PBXBuildFile; fileRef = 034144A81BDD4C0100482893 /* Comments.xib */; settings = {ASSET_TAGS = (); }; };
+		034144AB1BDD4C1A00482893 /* Comments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034144AA1BDD4C1A00482893 /* Comments.swift */; settings = {ASSET_TAGS = (); }; };
+		0356FE3A1BDD79F400B25BD0 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0356FE391BDD79F400B25BD0 /* CoreImage.framework */; };
 		0359D93E1BBB4F8400DE59A0 /* regStep1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0359D93A1BBB4F8300DE59A0 /* regStep1.swift */; settings = {ASSET_TAGS = (); }; };
 		0359D93F1BBB4F8400DE59A0 /* regStep2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0359D93B1BBB4F8300DE59A0 /* regStep2.swift */; settings = {ASSET_TAGS = (); }; };
 		0359D9411BBB4F8400DE59A0 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0359D93D1BBB4F8300DE59A0 /* Profile.swift */; settings = {ASSET_TAGS = (); }; };
@@ -61,6 +64,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		034144A81BDD4C0100482893 /* Comments.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Comments.xib; sourceTree = "<group>"; };
+		034144AA1BDD4C1A00482893 /* Comments.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Comments.swift; sourceTree = "<group>"; };
+		0356FE391BDD79F400B25BD0 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		0359D93A1BBB4F8300DE59A0 /* regStep1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = regStep1.swift; sourceTree = "<group>"; };
 		0359D93B1BBB4F8300DE59A0 /* regStep2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = regStep2.swift; sourceTree = "<group>"; };
 		0359D93D1BBB4F8300DE59A0 /* Profile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
@@ -111,6 +117,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0356FE3A1BDD79F400B25BD0 /* CoreImage.framework in Frameworks */,
 				03C66B081BBB440500AAD041 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -135,6 +142,7 @@
 		03C66AC21BBB3E0400AAD041 = {
 			isa = PBXGroup;
 			children = (
+				0356FE391BDD79F400B25BD0 /* CoreImage.framework */,
 				03C66B071BBB440500AAD041 /* MapKit.framework */,
 				03C66ACD1BBB3E0400AAD041 /* QlubbahApp */,
 				03C66AE51BBB3E0500AAD041 /* QlubbahAppTests */,
@@ -191,6 +199,8 @@
 				03C66ADD1BBB3E0500AAD041 /* Info.plist */,
 				03C66AD51BBB3E0400AAD041 /* QlubbahApp.xcdatamodeld */,
 				03C66AFF1BBB3FA400AAD041 /* QlubbahApp-Bridging-Header.h */,
+				034144A81BDD4C0100482893 /* Comments.xib */,
+				034144AA1BDD4C1A00482893 /* Comments.swift */,
 			);
 			path = QlubbahApp;
 			sourceTree = "<group>";
@@ -326,6 +336,7 @@
 				03C6A2141BC5C0A300EA587B /* SubView.xib in Resources */,
 				03C66B0A1BBB46CD00AAD041 /* Assets.xcassets in Resources */,
 				03A6622A1BCF42C3007BD662 /* Presentation.xib in Resources */,
+				034144A91BDD4C0100482893 /* Comments.xib in Resources */,
 				0366251D1BBC5B1600BACCCA /* music.gif in Resources */,
 				03C66AD41BBB3E0400AAD041 /* Main.storyboard in Resources */,
 			);
@@ -375,6 +386,7 @@
 				03CA66B21BCC246700069A8A /* completeReg.swift in Sources */,
 				03C66ACF1BBB3E0400AAD041 /* AppDelegate.swift in Sources */,
 				03C66B021BBB3FA400AAD041 /* SWRevealViewController.m in Sources */,
+				034144AB1BDD4C1A00482893 /* Comments.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
