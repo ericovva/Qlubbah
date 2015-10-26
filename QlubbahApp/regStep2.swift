@@ -23,7 +23,8 @@ class regStep2: UIViewController {
         self.navigationController?.navigationBar.translucent = false
                 self.reg_pass.secureTextEntry = true
                 self.reg_pass1.secureTextEntry = true
-        
+                self.reg_prom.keyboardType = UIKeyboardType.PhonePad
+                reg_pass.becomeFirstResponder()
       
         
     }

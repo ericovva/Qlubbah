@@ -61,7 +61,7 @@ final class SingletonObject {
                             var new_count2: String!
                             var delete = false
                             var new_count: String!
-                            if ( str?.rangeOfString(",\(club_number),") == nil ){
+                            if ( str?.rangeOfString(",\(club_id),") == nil ){
                                 new_count = label.text!
                                 label.text = "\(Int(new_count)! + 1)"
                                 img.image = UIImage(named: "bg")
@@ -75,40 +75,45 @@ final class SingletonObject {
                                 new_count2 = "\(Int(new_count)! - 1)"
                             }
                             if (delete){
-                                let newString = str!.stringByReplacingOccurrencesOfString(",\(club_number),", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+                                let newString = str!.stringByReplacingOccurrencesOfString(",\(club_id),", withString: ",", options: NSStringCompareOptions.LiteralSearch, range: nil)
                                 userDef.setObject(newString, forKey: "likes_list")
                                 print(newString)
                             }
                             else {
-                                let newString = str! + ",\(club_number),"
+                                let newString = str! + ",\(club_id),"
                                 userDef.setObject(newString, forKey: "likes_list")
                                 print(newString)
                                 
                             }
+                            //новая фишка надо протестить! dispatch block
+                            dispatch_async(dispatch_get_main_queue()) {
                             
-                            let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-                            
-                            let context:NSManagedObjectContext = appDel.managedObjectContext
-                            let request = NSFetchRequest(entityName: "Place")
-                            
-                            request.returnsObjectsAsFaults = false
-                            
-                            do {
-                                let result:NSArray = try context.executeFetchRequest(request)
+                                let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
                                 
-                                result[club_number].setValue(Int(new_count2), forKey: "likes");
+                                let context:NSManagedObjectContext = appDel.managedObjectContext
+                                let request = NSFetchRequest(entityName: "Place")
                                 
-                            }    catch {
-                                print("error8: fetch error")
+                                request.returnsObjectsAsFaults = false
+                                
+                                do {
+                                    let result:NSArray = try context.executeFetchRequest(request)
+                                    
+                                    result[club_number].setValue(Int(new_count2), forKey: "likes");
+                                    
+                                }    catch {
+                                    print("error8: fetch error")
+                                }
+                                
+                                do {
+                                    print("start")
+                                    try context.save()
+                                    print("change_data: Данные изменены успешно")
+                                } catch _ { print ("error4: Can't save object to core data")}
+                                //self.fetch_request()
+                                ////////
+                            
                             }
                             
-                            do {
-                                print("start")
-                                try context.save()
-                                print("change_data: Данные изменены успешно")
-                            } catch _ { print ("error4: Can't save object to core data")}
-                            //self.fetch_request()
-                            ////////
                             
                             
                             
@@ -140,10 +145,10 @@ final class SingletonObject {
                         if let jsonData = result.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true){
                             do {
                                 let jsonDict = (try NSJSONSerialization.JSONObjectWithData(jsonData, options: [])) as! NSDictionary
-                                print("httpRequest2: завершено")
+                                print("httpRequest: завершено")
                                 completion(result: jsonDict)
                             } catch {
-                                print("httpRequest2: error in data encoding!")
+                                print("httpRequest: error in data encoding!")
                             }
                         }
                         else {

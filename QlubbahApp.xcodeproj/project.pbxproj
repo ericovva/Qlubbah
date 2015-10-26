@@ -17,6 +17,9 @@
 		035D5AED1BCEB32600BF2422 /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = 035D5AEC1BCEB32600BF2422 /* About.swift */; settings = {ASSET_TAGS = (); }; };
 		0366251D1BBC5B1600BACCCA /* music.gif in Resources */ = {isa = PBXBuildFile; fileRef = 0366251C1BBC5B1600BACCCA /* music.gif */; settings = {ASSET_TAGS = (); }; };
 		036625201BBC5BCE00BACCCA /* UIImage+animatedGIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 0366251F1BBC5BCE00BACCCA /* UIImage+animatedGIF.m */; settings = {ASSET_TAGS = (); }; };
+		037ECC741BDE6ABC00ACB8F3 /* ChangePass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037ECC731BDE6ABC00ACB8F3 /* ChangePass.swift */; settings = {ASSET_TAGS = (); }; };
+		037ECC761BDEAA4200ACB8F3 /* MyNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037ECC751BDEAA4200ACB8F3 /* MyNumber.swift */; settings = {ASSET_TAGS = (); }; };
+		037ECC781BDECC2F00ACB8F3 /* RecoverPass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 037ECC771BDECC2F00ACB8F3 /* RecoverPass.swift */; settings = {ASSET_TAGS = (); }; };
 		03A6622A1BCF42C3007BD662 /* Presentation.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03A662291BCF42C2007BD662 /* Presentation.xib */; settings = {ASSET_TAGS = (); }; };
 		03A6622C1BCF45DF007BD662 /* PresentationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03A6622B1BCF45DF007BD662 /* PresentationCell.swift */; settings = {ASSET_TAGS = (); }; };
 		03A957FB1BD05F58003C50D6 /* Article.xib in Resources */ = {isa = PBXBuildFile; fileRef = 03A957FA1BD05F58003C50D6 /* Article.xib */; settings = {ASSET_TAGS = (); }; };
@@ -75,6 +78,9 @@
 		0366251C1BBC5B1600BACCCA /* music.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = music.gif; sourceTree = "<group>"; };
 		0366251E1BBC5BCE00BACCCA /* UIImage+animatedGIF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+animatedGIF.h"; sourceTree = "<group>"; };
 		0366251F1BBC5BCE00BACCCA /* UIImage+animatedGIF.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+animatedGIF.m"; sourceTree = "<group>"; };
+		037ECC731BDE6ABC00ACB8F3 /* ChangePass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePass.swift; sourceTree = "<group>"; };
+		037ECC751BDEAA4200ACB8F3 /* MyNumber.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyNumber.swift; sourceTree = "<group>"; };
+		037ECC771BDECC2F00ACB8F3 /* RecoverPass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecoverPass.swift; sourceTree = "<group>"; };
 		03A662291BCF42C2007BD662 /* Presentation.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Presentation.xib; sourceTree = "<group>"; };
 		03A6622B1BCF45DF007BD662 /* PresentationCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PresentationCell.swift; sourceTree = "<group>"; };
 		03A957FA1BD05F58003C50D6 /* Article.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = Article.xib; sourceTree = "<group>"; };
@@ -191,6 +197,9 @@
 				03C6FEB91BBC06E900448E8F /* Auth.swift */,
 				0359D93D1BBB4F8300DE59A0 /* Profile.swift */,
 				03C66AD21BBB3E0400AAD041 /* Main.storyboard */,
+				037ECC731BDE6ABC00ACB8F3 /* ChangePass.swift */,
+				037ECC751BDEAA4200ACB8F3 /* MyNumber.swift */,
+				037ECC771BDECC2F00ACB8F3 /* RecoverPass.swift */,
 				03CE45811BC9E10F00091A00 /* Sort.swift */,
 				03C66B031BBB432900AAD041 /* MenuController.swift */,
 				03C66B051BBB43C800AAD041 /* MapViewController.swift */,
@@ -364,6 +373,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				03C7A5C01BC3F9DA0031C4D0 /* Reachability.swift in Sources */,
+				037ECC781BDECC2F00ACB8F3 /* RecoverPass.swift in Sources */,
 				03C7A5C21BC40D690031C4D0 /* SingletonObject.swift in Sources */,
 				0359EEAE1BC5845A0024A527 /* Artwork.swift in Sources */,
 				03C66B041BBB432900AAD041 /* MenuController.swift in Sources */,
@@ -383,7 +393,9 @@
 				036625201BBC5BCE00BACCCA /* UIImage+animatedGIF.m in Sources */,
 				03C6A2161BC5C25900EA587B /* CustomSubView.swift in Sources */,
 				03A6622C1BCF45DF007BD662 /* PresentationCell.swift in Sources */,
+				037ECC741BDE6ABC00ACB8F3 /* ChangePass.swift in Sources */,
 				03CA66B21BCC246700069A8A /* completeReg.swift in Sources */,
+				037ECC761BDEAA4200ACB8F3 /* MyNumber.swift in Sources */,
 				03C66ACF1BBB3E0400AAD041 /* AppDelegate.swift in Sources */,
 				03C66B021BBB3FA400AAD041 /* SWRevealViewController.m in Sources */,
 				034144AB1BDD4C1A00482893 /* Comments.swift in Sources */,

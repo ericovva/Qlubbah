@@ -10,13 +10,20 @@ import UIKit
 
 class completeReg: UIViewController {
     var id_reg:Int!
-    
+    var go_out = false
     @IBOutlet weak var fu_button: UIBarButtonItem!
     func error_mess(_title: String,_message: String){
         let alert = UIAlertController(title: _title, message: _message, preferredStyle: UIAlertControllerStyle.Alert)
         //alert.view.backgroundColor = UIColor.darkGrayColor()
-        alert.addAction(UIAlertAction(title: "Закрыть", style: UIAlertActionStyle.Default, handler: nil))
+        let okButton = UIAlertAction(title: "Закрыть", style: UIAlertActionStyle.Default) { (okSelected) -> Void in
+            if (self.go_out) {
+                self.popVC()
+            }
+        }
+        alert.addAction(okButton)
+        //alert.addAction(UIAlertAction(title: "Закрыть", style: UIAlertActionStyle.Default, handler: nil))
         presentViewController(alert, animated: true, completion: nil)
+        
     }
     
     func httpRequest(input: NSURL,completion: (result: NSDictionary) -> Void){
@@ -58,6 +65,8 @@ class completeReg: UIViewController {
         fu_button.tintColor = UIColor.clearColor()
         fu_button.enabled = false
         print(id_reg)
+        activate_field.becomeFirstResponder()
+        self.activate_field.keyboardType = UIKeyboardType.PhonePad
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,7 +86,15 @@ class completeReg: UIViewController {
                     (result: NSDictionary) in
                     dispatch_async(dispatch_get_main_queue()) {
                         if let _result:NSDictionary = result{
-                            if nil != _result["id"] && nil != _result["name"] && nil != _result["hash"] {
+                            if nil != _result["id"] && nil != _result["name"] && nil != _result["hash"] && nil != _result["phone"] && nil != _result["email"] && nil != _result["present_code"] {
+                                print(_result)
+                                self.save_data(_result["name"]! as! String,
+                                                token: _result["hash"]! as! String,
+                                                id: _result["id"]! as! String,
+                                                likes_list: "",
+                                                email: _result["email"]! as! String,
+                                                phone: _result["phone"]! as! String,
+                                                promo: _result["present_code"]! as! String)
                                 if let secondViewController = self.storyboard?.instantiateViewControllerWithIdentifier("pr") as? Profile{
                                     let navController = UINavigationController(rootViewController: secondViewController)
                                     navController.setViewControllers([secondViewController], animated:true)
@@ -97,7 +114,8 @@ class completeReg: UIViewController {
                                                 self.error_mess("Ошибка",_message:"У вас кончились попытки")
                                             }
                                         }
-                                        //Уходи нахуй попыки кончились
+                                        self.go_out = true
+                                        //self.dismissViewControllerAnimated(true, completion: nil)
                                     }
                                 }
                             }
@@ -108,8 +126,27 @@ class completeReg: UIViewController {
         }
     }
     
-
-
+    func popVC(){
+        let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC)))
+        dispatch_after(delayTime, dispatch_get_main_queue()) {
+            self.navigationController?.popToRootViewControllerAnimated(true)
+        }
+        
+    }
+    func save_data(name: String,token: String, id: String,likes_list: String,email: String, phone: String, promo: String){
+        //userdefault
+        let userDefaults = NSUserDefaults.standardUserDefaults()
+        userDefaults.setBool(true, forKey: "qlubbah_man")
+        userDefaults.setBool(true, forKey: "auth")
+        userDefaults.setObject(id, forKey: "id")
+        userDefaults.setObject(token, forKey: "hash")
+        userDefaults.setObject(likes_list, forKey: "likes_list")
+        userDefaults.setObject(name, forKey: "name")
+        userDefaults.setObject(email, forKey: "email")
+        userDefaults.setObject(phone, forKey: "phone")
+        userDefaults.setObject(promo, forKey: "promo")
+        
+    }
     
 
     /*

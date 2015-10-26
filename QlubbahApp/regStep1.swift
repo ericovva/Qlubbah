@@ -29,7 +29,7 @@ class regStep1: UIViewController {
         self.reg_phone.keyboardType = UIKeyboardType.PhonePad
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
         view.addGestureRecognizer(tap)
-
+        reg_name.becomeFirstResponder()
 
         
 

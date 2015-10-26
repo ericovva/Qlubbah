@@ -9,8 +9,10 @@
 import UIKit
 
 class ClubTableViewCell: UITableViewCell {
-
-    
+    var club_id: String!
+    var club_number: Int!
+    @IBOutlet weak var like_hand_image_in_list: UIImageView!
+    var _view: UIViewController!
     @IBOutlet weak var mCount: UILabel!
     @IBOutlet weak var m5: UIImageView!
     @IBOutlet weak var m4: UIImageView!
@@ -32,8 +34,28 @@ class ClubTableViewCell: UITableViewCell {
     }
     
     @IBAction func like_button(sender: AnyObject) {
-        print("CLICK")
+        let userDef = NSUserDefaults.standardUserDefaults()
+        if (Reachability.isConnectedToNetwork()){
+            if (userDef.boolForKey("auth")){
+                
+                SingletonObject.sharedInstance.like_club(club_number, label: likes, img: likeHand, club_id: club_id)
+                
+            }
+            else {
+                self.error_mess("Авторизуйтесь", _message: "Для этого действия необходима авторизация.")
+            }
+        }
+        else {
+            self.error_mess("Ошибка соединения", _message: "Прверьте подключение к Интернету.")
+            
+        }
         
+    }
+    func error_mess(_title: String,_message: String){
+        let alert = UIAlertController(title: _title, message: _message, preferredStyle: UIAlertControllerStyle.Alert)
+        //alert.view.backgroundColor = UIColor.darkGrayColor()
+        alert.addAction(UIAlertAction(title: "Закрыть", style: UIAlertActionStyle.Default, handler: nil))
+        _view.presentViewController(alert, animated: true, completion: nil)
     }
 
     override func setSelected(selected: Bool, animated: Bool) {

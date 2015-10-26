@@ -382,10 +382,10 @@
             </objects>
             <point key="canvasLocation" x="-1884" y="-683"/>
         </scene>
-        <!--View Controller-->
+        <!--Номер телефона-->
         <scene sceneID="Tnt-kK-m20">
             <objects>
-                <viewController id="C4h-eJ-VVz" sceneMemberID="viewController">
+                <viewController title="Номер телефона" id="C4h-eJ-VVz" customClass="MyNumber" customModule="QlubbahApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="eLC-fg-SIm"/>
                         <viewControllerLayoutGuide type="bottom" id="xEd-c7-hpI"/>
@@ -397,14 +397,9 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="vql-IE-bqa">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                             </imageView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VgQ-OR-NO9">
-                                <rect key="frame" x="20" y="31" width="288" height="224"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VgQ-OR-NO9">
+                                <rect key="frame" x="16" y="29" width="288" height="224"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" text="XXX - XXX - XXX" placeholder="Ваш email" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DHO-9Z-jhn">
-                                        <rect key="frame" x="69" y="0.0" width="211" height="31"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="call" translatesAutoresizingMaskIntoConstraints="NO" id="BQh-Gr-mD5">
                                         <rect key="frame" x="10" y="0.0" width="40" height="40"/>
                                     </imageView>
@@ -412,25 +407,42 @@
                                         <rect key="frame" x="6" y="39" width="274" height="1"/>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QfN-3n-rjF">
-                                        <rect key="frame" x="0.0" y="61" width="272" height="30"/>
-                                        <state key="normal" title="Напомнить пароль">
-                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="XXX - XXX - XXX" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="DHO-9Z-jhn">
+                                        <rect key="frame" x="69" y="0.0" width="211" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="224" id="rXy-zO-0zT"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="VgQ-OR-NO9" firstAttribute="top" secondItem="eLC-fg-SIm" secondAttribute="bottom" constant="29" id="Fhs-zx-Jf4"/>
                             <constraint firstItem="vql-IE-bqa" firstAttribute="top" secondItem="eLC-fg-SIm" secondAttribute="bottom" id="M31-zf-5J3"/>
+                            <constraint firstItem="VgQ-OR-NO9" firstAttribute="leading" secondItem="eGj-NU-ibz" secondAttribute="leading" constant="16" id="PT2-CP-q9R"/>
                             <constraint firstItem="vql-IE-bqa" firstAttribute="leading" secondItem="eGj-NU-ibz" secondAttribute="leading" id="WSb-Tk-pXz"/>
+                            <constraint firstAttribute="trailing" secondItem="VgQ-OR-NO9" secondAttribute="trailing" constant="16" id="e07-BY-WSX"/>
                             <constraint firstItem="xEd-c7-hpI" firstAttribute="top" secondItem="vql-IE-bqa" secondAttribute="bottom" id="emb-hm-7jT"/>
                             <constraint firstAttribute="trailing" secondItem="vql-IE-bqa" secondAttribute="trailing" id="s4d-A1-ekC"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Номер телефона" id="UG4-tF-x5u">
+                        <barButtonItem key="backBarButtonItem" title="Назад" id="2Tt-HN-Zn8"/>
+                        <barButtonItem key="rightBarButtonItem" title="Далее" id="DYr-ut-PuM">
+                            <color key="tintColor" red="0.97167926280000005" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="next:" destination="C4h-eJ-VVz" id="pfP-7P-qcX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="phone" destination="DHO-9Z-jhn" id="HJX-Pu-bgV"/>
+                        <segue destination="Xbs-Vp-Hgs" kind="show" identifier="go_to_change" id="TLi-Bv-ZU5"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aOn-3b-73n" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -553,7 +565,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8bY-wv-dgz">
                                 <rect key="frame" x="12" y="25" width="296" height="185"/>
                                 <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="pzE-9t-OZ6">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pzE-9t-OZ6">
                                         <rect key="frame" x="10" y="46" width="40" height="40"/>
                                     </imageView>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QRF-8h-vR3">
@@ -565,6 +577,12 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="( 3 попытки ) " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bLz-No-Jni">
+                                        <rect key="frame" x="18" y="94" width="255" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="13"/>
+                                        <color key="textColor" red="0.40658538509999997" green="0.3877568522" blue="0.2029145738" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -600,7 +618,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8ZE-Ti-2hy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="26" y="-1464"/>
+            <point key="canvasLocation" x="21" y="-1464"/>
         </scene>
         <!--Шаг 1-->
         <scene sceneID="NLD-UK-Qde">
@@ -945,10 +963,10 @@
             </objects>
             <point key="canvasLocation" x="-1884" y="60"/>
         </scene>
-        <!--View Controller-->
+        <!--Подтверждение-->
         <scene sceneID="oAA-P0-8DZ">
             <objects>
-                <viewController id="xpy-Df-JxN" sceneMemberID="viewController">
+                <viewController id="xpy-Df-JxN" customClass="ChangePass" customModule="QlubbahApp" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="KAB-5C-RP8"/>
                         <viewControllerLayoutGuide type="bottom" id="2QZ-fV-hZD"/>
@@ -956,12 +974,84 @@
                     <view key="view" contentMode="scaleToFill" id="5iI-vh-XyA">
                         <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="BrZ-nr-Tjz">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="flX-gv-yzd">
+                                <rect key="frame" x="15" y="8" width="290" height="185"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Повторите пароль" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Y04-NX-8R0">
+                                        <rect key="frame" x="69" y="48" width="211" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                    </textField>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="E03-pG-8HM">
+                                        <rect key="frame" x="8" y="0.0" width="40" height="40"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="3ME-em-quz">
+                                        <rect key="frame" x="8" y="48" width="40" height="40"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="9Lt-by-NTh">
+                                        <rect key="frame" x="8" y="96" width="40" height="42"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yuk-yF-msQ">
+                                        <rect key="frame" x="6" y="39" width="274" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sjp-Dp-64I">
+                                        <rect key="frame" x="6" y="87" width="274" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zya-54-grY">
+                                        <rect key="frame" x="6" y="137" width="274" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Ваш старый пароль" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vcP-WQ-zbK">
+                                        <rect key="frame" x="69" y="96" width="211" height="33"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Ваш новый пароль" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="yco-0U-xgc">
+                                        <rect key="frame" x="69" y="0.0" width="211" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="185" id="FSb-fA-GaZ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="BrZ-nr-Tjz" firstAttribute="leading" secondItem="5iI-vh-XyA" secondAttribute="leading" id="JIg-7U-HbG"/>
+                            <constraint firstAttribute="trailing" secondItem="BrZ-nr-Tjz" secondAttribute="trailing" id="Rjd-GB-X20"/>
+                            <constraint firstItem="flX-gv-yzd" firstAttribute="leading" secondItem="5iI-vh-XyA" secondAttribute="leading" constant="15" id="Yln-JB-pA5"/>
+                            <constraint firstAttribute="trailing" secondItem="flX-gv-yzd" secondAttribute="trailing" constant="15" id="ZRb-Qm-Fvu"/>
+                            <constraint firstItem="flX-gv-yzd" firstAttribute="top" secondItem="KAB-5C-RP8" secondAttribute="bottom" constant="8" id="c41-2S-Hca"/>
+                            <constraint firstItem="BrZ-nr-Tjz" firstAttribute="top" secondItem="KAB-5C-RP8" secondAttribute="bottom" id="dVb-fw-XJZ"/>
+                            <constraint firstItem="2QZ-fV-hZD" firstAttribute="top" secondItem="BrZ-nr-Tjz" secondAttribute="bottom" id="y0C-8o-Duz"/>
+                        </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Подтверждение" id="sNk-Jh-xci">
+                        <barButtonItem key="rightBarButtonItem" title="Готово" id="WEF-wQ-eih">
+                            <color key="tintColor" red="0.97167926280000005" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="ready:" destination="xpy-Df-JxN" id="Xqo-AJ-P1q"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="new_pass" destination="yco-0U-xgc" id="wgW-ig-CDI"/>
+                        <outlet property="old_pass" destination="vcP-WQ-zbK" id="iA0-hV-IBj"/>
+                        <outlet property="repeat_pass" destination="Y04-NX-8R0" id="BYd-TW-m5q"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6uY-iv-mvg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1246.5" y="22"/>
+            <point key="canvasLocation" x="-1247" y="22"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="7NJ-dB-Oun">
@@ -1406,6 +1496,7 @@
                                             <outlet property="clubName" destination="5ZR-pa-Hom" id="BHr-T1-MqJ"/>
                                             <outlet property="clubPlace" destination="y7R-Jc-s7M" id="gus-iR-idl"/>
                                             <outlet property="likeHand" destination="rkr-n8-kW3" id="j0V-mo-1qa"/>
+                                            <outlet property="like_hand_image_in_list" destination="rkr-n8-kW3" id="K8c-Jt-kot"/>
                                             <outlet property="likes" destination="GpN-vJ-Mmk" id="McH-Aj-yf9"/>
                                             <outlet property="m1" destination="UD6-5F-89B" id="S93-yb-Fxg"/>
                                             <outlet property="m2" destination="s1F-jQ-t5O" id="YVe-9M-10F"/>
@@ -1855,6 +1946,102 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gkU-jA-GcO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1247" y="766"/>
+        </scene>
+        <!--Смена пароля-->
+        <scene sceneID="jhC-R7-80s">
+            <objects>
+                <viewController title="Смена пароля" id="Xbs-Vp-Hgs" customClass="RecoverPass" customModule="QlubbahApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="WHs-PE-01q"/>
+                        <viewControllerLayoutGuide type="bottom" id="3ml-rj-8Qi"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="On1-Sc-6LP">
+                        <rect key="frame" x="0.0" y="64" width="320" height="504"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg" translatesAutoresizingMaskIntoConstraints="NO" id="n22-GY-MMA">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QyO-R4-Ery">
+                                <rect key="frame" x="12" y="25" width="296" height="185"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FLE-eU-gEC">
+                                        <rect key="frame" x="13" y="0.0" width="40" height="40"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iCU-Kv-zSA">
+                                        <rect key="frame" x="11" y="39" width="274" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Код подтверждения" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7uq-Pd-wmK">
+                                        <rect key="frame" x="74" y="0.0" width="211" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="TKk-sF-maS">
+                                        <rect key="frame" x="13" y="55" width="40" height="40"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="sAa-2W-0d3">
+                                        <rect key="frame" x="11" y="94" width="274" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Новый пароль" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C37-AD-58K">
+                                        <rect key="frame" x="74" y="55" width="211" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="Uab-Dc-6wn">
+                                        <rect key="frame" x="13" y="109" width="40" height="40"/>
+                                    </imageView>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="djP-gQ-RWk">
+                                        <rect key="frame" x="11" y="148" width="274" height="1"/>
+                                        <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Повторите пароль" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sag-i2-hSb">
+                                        <rect key="frame" x="74" y="109" width="211" height="31"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="185" id="Dkd-yB-Nj0"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="3ml-rj-8Qi" firstAttribute="top" secondItem="n22-GY-MMA" secondAttribute="bottom" id="U7G-NU-Rek"/>
+                            <constraint firstAttribute="trailing" secondItem="n22-GY-MMA" secondAttribute="trailing" id="bZ4-4Y-D3b"/>
+                            <constraint firstItem="QyO-R4-Ery" firstAttribute="leading" secondItem="On1-Sc-6LP" secondAttribute="leading" constant="12" id="f83-F8-W0i"/>
+                            <constraint firstItem="n22-GY-MMA" firstAttribute="leading" secondItem="On1-Sc-6LP" secondAttribute="leading" id="ggW-YX-uwB"/>
+                            <constraint firstItem="QyO-R4-Ery" firstAttribute="top" secondItem="WHs-PE-01q" secondAttribute="bottom" constant="25" id="qWL-q7-cNt"/>
+                            <constraint firstItem="n22-GY-MMA" firstAttribute="top" secondItem="WHs-PE-01q" secondAttribute="bottom" id="tLx-uG-5Qj"/>
+                            <constraint firstAttribute="trailing" secondItem="QyO-R4-Ery" secondAttribute="trailing" constant="12" id="xHB-gM-6FU"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Подтверждение" id="n7y-F6-gjr">
+                        <barButtonItem key="leftBarButtonItem" title="Отмена" id="IRr-Km-Upl">
+                            <color key="tintColor" red="1" green="0.92797498349999996" blue="0.078938658519999996" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="cancel:" destination="Xbs-Vp-Hgs" id="R4w-I4-Lah"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Готово" id="eGN-ff-FnV">
+                            <color key="tintColor" red="0.97167926280000005" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <action selector="Done:" destination="Xbs-Vp-Hgs" id="InQ-QX-ktC"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="code" destination="7uq-Pd-wmK" id="tMY-uz-cl6"/>
+                        <outlet property="new_pass" destination="C37-AD-58K" id="wU5-pm-iTy"/>
+                        <outlet property="repeat_pass" destination="sag-i2-hSb" id="EIM-vr-c5s"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2Yo-nG-ted" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-789" y="-683"/>
         </scene>
     </scenes>
     <resources>

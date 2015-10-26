@@ -47,7 +47,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
                 if any_active_annotations {
                     self.map_footer_panel.hidden = false
                 }
-                self.locationManager.startUpdatingLocation()
+                //self.locationManager.startUpdatingLocation()
                 self.current_location_button.hidden = false
                 tableViewList.hidden = true ;
                 mapView.hidden = false
@@ -55,6 +55,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         default:
             sort_button.tintColor = UIColor.yellowColor()
             sort_button.enabled = true
+            tableViewList.reloadData() // мб причина вылетов
             if (map_init){
                 self.locationManager.stopUpdatingLocation();
             }
@@ -462,31 +463,50 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         
         
     }
+    func error_mess(_title: String,_message: String){
+        let alert = UIAlertController(title: _title, message: _message, preferredStyle: UIAlertControllerStyle.Alert)
+        //alert.view.backgroundColor = UIColor.darkGrayColor()
+        alert.addAction(UIAlertAction(title: "Закрыть", style: UIAlertActionStyle.Default, handler: nil))
+        presentViewController(alert, animated: true, completion: nil)
+    }
     
 
     
     
     @IBOutlet weak var map_footer_panel: UIView!
     @IBAction func like_button(sender: AnyObject) {
-        print("SSSSSSSSSSSS\(club_route_id)")
-        SingletonObject.sharedInstance.like_club(selected_row,label: like_label,img: like_img,club_id: ((core_data_result[selected_row]).valueForKey("id") as? String)!)
-        fetch_request()
+        let userDef = NSUserDefaults.standardUserDefaults()
+        if (Reachability.isConnectedToNetwork()){
+            if (userDef.boolForKey("auth")){
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {//new
+                    SingletonObject.sharedInstance.like_club(self.selected_row,label: self.like_label,img: self.like_img,club_id: ((self.core_data_result[self.selected_row]).valueForKey("id") as? String)!)
+                    dispatch_async(dispatch_get_main_queue()) {//new
+                        //self.fetch_request()
+                    }
+                }
+
+                
+                
+                
+            }
+            else {
+                error_mess("Авторизуйтесь", _message: "Для этого действия необходима авторизация.")
+            }
+        }
+        else {
+            self.error_mess("Ошибка соединения", _message: "Прверьте подключение к Интернету.")
+            
+        }
     }
     @IBOutlet weak var like_img: UIImageView!
     @IBOutlet weak var like_label: UILabel!
     @IBAction func get_route(sender: AnyObject) {
         var addressToLinkTo = ""
-        
-        //Fill the container with an address
-        
         addressToLinkTo = "http://maps.apple.com/?daddr=\(club_route_id)&saddr=Current+Location"
-        
         if let st = addressToLinkTo.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()){
             let url = NSURL(string: st)
             UIApplication.sharedApplication().openURL(url!)
         }
-        
-        
     }
     
     
@@ -505,18 +525,13 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         locationManager = CLLocationManager()
         locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         locationManager.delegate = self;
-        //locationManager.startUpdatingLocation()
         let status = CLLocationManager.authorizationStatus()
         if status == .NotDetermined || status == .Denied || status == .AuthorizedWhenInUse {
-            // present an alert indicating location authorization required
-            // and offer to take the user to Settings for the app via
-            // UIApplication -openUrl: and UIApplicationOpenSettingsURLString
             locationManager.requestAlwaysAuthorization()
             locationManager.requestWhenInUseAuthorization()
         }
-        locationManager.startUpdatingLocation()
+        //locationManager.startUpdatingLocation()
         locationManager.startUpdatingHeading()
-        //mapview setup to show user location
         mapView.delegate = self
         mapView.showsUserLocation = true
         mapView.mapType = MKMapType(rawValue: 0)!
@@ -534,7 +549,6 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
                 pointAnnotation.title = "\(i)"
                 self.mapView?.addAnnotation(pointAnnotation)
                 self.mapView?.centerCoordinate = self.coords!
-                
             }
         }
     
@@ -604,6 +618,22 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
                 customView.bg.image = UIImage(data: imgData as! NSData)
             }
             like_label.text = String(((core_data_result[view.tag]).valueForKey("likes"))!)
+            let userDef = NSUserDefaults.standardUserDefaults()
+            let id = (core_data_result[view.tag]).valueForKey("id") as? String
+            if userDef.boolForKey("auth"){
+                let was_liked = userDef.stringForKey("likes_list")
+                
+                if (was_liked!.rangeOfString("," + id! + ",") != nil){
+                    like_img.image = UIImage(named: "bg")
+                }
+                else {
+                    like_img.image = UIImage(named: "like")
+                }
+            }
+
+            
+            
+            
             club_route_id = (core_data_result[view.tag].valueForKey("place") as? String)!
           
             view.addSubview(customView)
@@ -621,6 +651,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         self.map_footer_panel.hidden = true
         self.any_active_annotations = false
         view.subviews.forEach({ $0.removeFromSuperview() })
+        fetch_request()
     }
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
          print("LL")
@@ -644,23 +675,35 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! ClubTableViewCell
         cell.photo.layer.cornerRadius = 10
         cell.photo.clipsToBounds = true
-        //print((core_data_result[indexPath.row]).valueForKey("name"))
         cell.clubName.text = (core_data_result[indexPath.row]).valueForKey("name") as? String
         cell.mCount.text = (core_data_result[indexPath.row]).valueForKey("people") as? String
+        
         let likes = (core_data_result[indexPath.row]).valueForKey("likes")
         if let likes_ = likes { cell.likes.text = "\(likes_)" }
+        let userDef = NSUserDefaults.standardUserDefaults()
+        let id = (core_data_result[indexPath.row]).valueForKey("id") as? String
+        if userDef.boolForKey("auth"){
+            let was_liked = userDef.stringForKey("likes_list")
+            
+            if (was_liked!.rangeOfString("," + id! + ",") != nil){
+                cell.like_hand_image_in_list.image = UIImage(named: "bg")
+            }
+            else {
+                cell.like_hand_image_in_list.image = UIImage(named: "like")
+            }
+        }
+        cell.club_id = id
+        cell.club_number = indexPath.row
+        cell._view = self
+        
         cell.womenAge.text = (core_data_result[indexPath.row]).valueForKey("age_female") as? String
         cell.menAge.text = (core_data_result[indexPath.row]).valueForKey("age") as? String
         cell.women.text = (core_data_result[indexPath.row]).valueForKey("female") as? String
         cell.men.text = (core_data_result[indexPath.row]).valueForKey("male") as? String
         cell.clubPlace.text = (core_data_result[indexPath.row]).valueForKey("place") as? String
-        
         if let imgData = core_data_result[indexPath.row].valueForKey("img"){
             cell.photo.image = UIImage(data: imgData as! NSData)
         }
-        //print(  (core_data_result[indexPath.row]).valueForKey("id") )
-        
-        
         return cell
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -706,7 +749,14 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         super.didReceiveMemoryWarning()
         
     }
-    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+//        self.mapView.showsUserLocation = false
+//        self.mapView.delegate = nil
+//        self.mapView.removeFromSuperview()
+//        self.mapView = nil
+    }
     
   
    
