@@ -269,6 +269,8 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
         let cell0 = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! PresentationCell
         let cell1 = tableView.dequeueReusableCellWithIdentifier("cell1", forIndexPath: indexPath) as! ArticleCell
         let cell2 = tableView.dequeueReusableCellWithIdentifier("cell2", forIndexPath: indexPath) as! Comments
+        
+        
         if (indexPath.row == 0){ tableView.rowHeight = self.view.frame.size.width + 40
             
             let nib = UINib(nibName: "CollectionViewCell", bundle: nil)
@@ -300,7 +302,7 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
                            cell2.l_date.text = tmp2 as? String
                             let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
                             cell2.addGestureRecognizer(tap)
-                            
+                            cell2.selectionStyle = UITableViewCellSelectionStyle.None
                             return cell2
                         }
                      }
@@ -312,14 +314,14 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
                 cell1.club_address.text  = address
                 let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "DismissKeyboard")
                 cell1.addGestureRecognizer(tap)
-                
+                cell1.selectionStyle = UITableViewCellSelectionStyle.None
                 return cell1
             }
             
             
             
         }
-        
+        cell0.selectionStyle = UITableViewCellSelectionStyle.None
         return cell0
     }
     

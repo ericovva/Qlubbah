@@ -48,7 +48,7 @@ class RecoverPass: UIViewController {
                 var st = "&pass=" + new_pass.text!
                     st += "&pass1=" + repeat_pass.text!
                     st += "&pass_code=" + code.text!
-                    st += "&phone=" + "+7" + phone
+                    st += "&phone="  + phone
                 let url_srt: NSString = "http://qlubbah.ru/api.php?action=pass_recover_code_write&keys=1\(st)";
                 print(url_srt);
                 let urlStr : NSString = url_srt.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!

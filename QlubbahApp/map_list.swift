@@ -535,8 +535,8 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         mapView.delegate = self
         mapView.showsUserLocation = true
         mapView.mapType = MKMapType(rawValue: 0)!
-        mapView.userTrackingMode = MKUserTrackingMode(rawValue: 2)!
-        
+        mapView.userTrackingMode = MKUserTrackingMode(rawValue: 0)!
+        var point_mas: [MKPointAnnotation] = []
         if (!changing){ //жесткий костыль
             for i in 0..<self.core_data_result.count{
                 
@@ -548,15 +548,11 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
                 pointAnnotation.coordinate = self.coords!
                 pointAnnotation.title = "\(i)"
                 self.mapView?.addAnnotation(pointAnnotation)
-                self.mapView?.centerCoordinate = self.coords!
+                point_mas.append(pointAnnotation)
+                //self.mapView?.centerCoordinate = self.coords!
             }
         }
-    
-        
-        
-        
-        
-        
+        fitMapViewToAnnotaionList(point_mas)
     }
     
     
@@ -565,6 +561,24 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         mapView.userTrackingMode = MKUserTrackingMode(rawValue: 2)!
         
         //mapView.showsUserLocation = false //что она делает?? хз
+    }
+    func fitMapViewToAnnotaionList(annotations: [MKPointAnnotation]) -> Void {
+        let mapEdgePadding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        var zoomRect:MKMapRect = MKMapRectNull
+        
+        for index in 0..<annotations.count {
+            let annotation = annotations[index]
+            let aPoint:MKMapPoint = MKMapPointForCoordinate(annotation.coordinate)
+            let rect:MKMapRect = MKMapRectMake(aPoint.x, aPoint.y, 0.1, 0.1)
+            
+            if MKMapRectIsNull(zoomRect) {
+                zoomRect = rect
+            } else {
+                zoomRect = MKMapRectUnion(zoomRect, rect)
+            }
+        }
+        
+        mapView.setVisibleMapRect(zoomRect, edgePadding: mapEdgePadding, animated: true)
     }
     
     func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
@@ -596,62 +610,74 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
     
     func mapView(mapView: MKMapView,
         didSelectAnnotationView view: MKAnnotationView){
-            if view.annotation!.isKindOfClass(MKUserLocation){
-                return
-            }
-            self.selected_row = view.tag
-            let customView = (NSBundle.mainBundle().loadNibNamed("SubView", owner: self, options: nil))[0] as! CustomSubView;
-            
-            var calloutViewFrame = customView.frame;
-            calloutViewFrame.origin = CGPointMake(-calloutViewFrame.size.width/2 + 15, -calloutViewFrame.size.height);
-            customView.frame = calloutViewFrame;
-            
-            let cpa = view.annotation
-            customView.name.text = core_data_result[view.tag].valueForKey("name") as? String
-            customView.address.text = core_data_result[view.tag].valueForKey("place") as? String
-            customView.m_c.text = (core_data_result[view.tag]).valueForKey("male") as? String
-            customView.w_a.text = (core_data_result[view.tag]).valueForKey("age_female") as? String
-            customView.m_a.text = (core_data_result[view.tag]).valueForKey("age") as? String
-            customView.w_c.text = (core_data_result[view.tag]).valueForKey("female") as? String
-            customView.c.text = (core_data_result[view.tag]).valueForKey("people") as? String
-            if let imgData = core_data_result[view.tag].valueForKey("img"){
-                customView.bg.image = UIImage(data: imgData as! NSData)
-            }
-            like_label.text = String(((core_data_result[view.tag]).valueForKey("likes"))!)
-            let userDef = NSUserDefaults.standardUserDefaults()
-            let id = (core_data_result[view.tag]).valueForKey("id") as? String
-            if userDef.boolForKey("auth"){
-                let was_liked = userDef.stringForKey("likes_list")
+            if (!changing){
                 
-                if (was_liked!.rangeOfString("," + id! + ",") != nil){
-                    like_img.image = UIImage(named: "bg")
+                if view.annotation!.isKindOfClass(MKUserLocation){
+                    return
                 }
-                else {
-                    like_img.image = UIImage(named: "like")
+                self.selected_row = view.tag
+                let customView = (NSBundle.mainBundle().loadNibNamed("SubView", owner: self, options: nil))[0] as! CustomSubView;
+                
+                var calloutViewFrame = customView.frame;
+                calloutViewFrame.origin = CGPointMake(-calloutViewFrame.size.width/2 + 15, -calloutViewFrame.size.height);
+                customView.frame = calloutViewFrame;
+                
+                let cpa = view.annotation
+                customView.name.text = core_data_result[view.tag].valueForKey("name") as? String
+                customView.address.text = core_data_result[view.tag].valueForKey("place") as? String
+                customView.m_c.text = (core_data_result[view.tag]).valueForKey("male") as? String
+                customView.w_a.text = (core_data_result[view.tag]).valueForKey("age_female") as? String
+                customView.m_a.text = (core_data_result[view.tag]).valueForKey("age") as? String
+                customView.w_c.text = (core_data_result[view.tag]).valueForKey("female") as? String
+                customView.c.text = (core_data_result[view.tag]).valueForKey("people") as? String
+                if let imgData = core_data_result[view.tag].valueForKey("img"){
+                    customView.bg.image = UIImage(data: imgData as! NSData)
                 }
+                like_label.text = String(((core_data_result[view.tag]).valueForKey("likes"))!)
+                let userDef = NSUserDefaults.standardUserDefaults()
+                let id = (core_data_result[view.tag]).valueForKey("id") as? String
+                if userDef.boolForKey("auth"){
+                    let was_liked = userDef.stringForKey("likes_list")
+                    
+                    if (was_liked!.rangeOfString("," + id! + ",") != nil){
+                        like_img.image = UIImage(named: "bg")
+                    }
+                    else {
+                        like_img.image = UIImage(named: "like")
+                    }
+                }
+                
+                
+                
+                
+                club_route_id = (core_data_result[view.tag].valueForKey("place") as? String)!
+                
+                view.addSubview(customView)
+                view.bringSubviewToFront(customView)
+                //zoom map to show callout
+                let spanX = 1.0
+                let spanY = 1.0
+                
+                let newRegion = MKCoordinateRegion(center:cpa!.coordinate, span: MKCoordinateSpanMake(spanX, spanY))
+                self.mapView?.setRegion(newRegion, animated: true)
+                self.map_footer_panel.hidden = false
+                self.any_active_annotations = true
+                
             }
-
+            else {
+                error_mess("Ожидайте", _message: "Данные обновляются...")
+            }
             
-            
-            
-            club_route_id = (core_data_result[view.tag].valueForKey("place") as? String)!
-          
-            view.addSubview(customView)
-            view.bringSubviewToFront(customView)
-            //zoom map to show callout
-            let spanX = 0.01
-            let spanY = 0.01
-            
-            let newRegion = MKCoordinateRegion(center:cpa!.coordinate, span: MKCoordinateSpanMake(spanX, spanY))
-            self.mapView?.setRegion(newRegion, animated: true)
-            self.map_footer_panel.hidden = false
-            self.any_active_annotations = true
     }
     func mapView(mapView: MKMapView, didDeselectAnnotationView view: MKAnnotationView) {
-        self.map_footer_panel.hidden = true
-        self.any_active_annotations = false
-        view.subviews.forEach({ $0.removeFromSuperview() })
-        fetch_request()
+        
+            self.map_footer_panel.hidden = true
+            self.any_active_annotations = false
+            view.subviews.forEach({ $0.removeFromSuperview() })
+        if (!changing){
+            fetch_request()
+        }
+        
     }
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
          print("LL")
@@ -704,6 +730,7 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         if let imgData = core_data_result[indexPath.row].valueForKey("img"){
             cell.photo.image = UIImage(data: imgData as! NSData)
         }
+        cell.selectionStyle = UITableViewCellSelectionStyle.None
         return cell
     }
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -718,31 +745,64 @@ class map_list: UIViewController,UITableViewDelegate, UITableViewDataSource,  MK
         performSegueWithIdentifier("about", sender: nil)
     }
     
+    
    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject!) {
+        var error_message = false
         
-        if segue.identifier == "about" {
-            let svc = segue.destinationViewController as! About;
-            svc.id = ((core_data_result[selected_row]).valueForKey("id") as? String)!
-            if let img_ = ((core_data_result[selected_row]).valueForKey("img_src") as? String) {
-                svc.images_src = img_
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) {
+            if (Reachability.isConnectedToNetwork()){
+                var time_refresh = 0
+                while (self.changing){
+                    sleep(1)
+                    time_refresh++
+                    if (time_refresh > 40){
+                        error_message = true
+                        break;
+                    }
+                }
+                if (!error_message){
+                    if segue.identifier == "about" {
+                        let svc = segue.destinationViewController as! About;
+                        svc.id = ((self.core_data_result[self.selected_row]).valueForKey("id") as? String)!
+                        if let img_ = ((self.core_data_result[self.selected_row]).valueForKey("img_src") as? String) {
+                            svc.images_src = img_
+                        }
+                        else {
+                            print("ERROR!!")
+                        }
+                        svc.article = ((self.core_data_result[self.selected_row]).valueForKey("about") as? String)!
+                        svc.name = ((self.core_data_result[self.selected_row]).valueForKey("name") as? String)!
+                        svc.address = ((self.core_data_result[self.selected_row]).valueForKey("place") as? String)!
+                        if (SingletonObject.sharedInstance.about_update_ids.rangeOfString("none") == nil && SingletonObject.sharedInstance.about_update_ids.rangeOfString("," + svc.id + ",") == nil) {
+                            //обнвоить картинки
+                            svc.update = true
+                        }
+                        else {
+                            //не обновлять картинки
+                            svc.update = false
+                        }
+                    }
+                    
+                }
+                
+                
             }
             else {
-                print("ERROR!!")
+                error_message = true
             }
-            svc.article = ((core_data_result[selected_row]).valueForKey("about") as? String)!
-            svc.name = ((core_data_result[selected_row]).valueForKey("name") as? String)!
-            svc.address = ((core_data_result[selected_row]).valueForKey("place") as? String)!
-            if (SingletonObject.sharedInstance.about_update_ids.rangeOfString("none") == nil && SingletonObject.sharedInstance.about_update_ids.rangeOfString("," + svc.id + ",") == nil) {
-                //обнвоить картинки
-                svc.update = true               
-            }
-            else {
-                //не обновлять картинки
-                svc.update = false
+            dispatch_async(dispatch_get_main_queue()) {
+                if (error_message){
+                    self.error_mess("Ошибка соединения", _message: "Нет соединения с Интернетом")
+                }
             }
         }
+        
+        
+        
+        
+        
     }
    
     override func didReceiveMemoryWarning() {
