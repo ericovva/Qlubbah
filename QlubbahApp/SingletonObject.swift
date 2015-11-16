@@ -6,6 +6,7 @@
 //  Copyright © 2015 qlubbah. All rights reserved.
 //
 import CoreData
+import MapKit
 final class SingletonObject {
     
     static let sharedInstance = SingletonObject()
@@ -17,6 +18,8 @@ final class SingletonObject {
     internal var allow = true
     internal var about_update_ids = "none"
     internal var update_about = false
+    internal var map = MKMapView!()
+    internal var map_init = false
     internal func delete_data(entity_name:String) {
         
         let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
@@ -42,7 +45,7 @@ final class SingletonObject {
     }
     
     ///
-    func like_club(club_number: Int, label: UILabel, img: UIImageView,club_id: String){
+    func like_club(label: UILabel, img: UIImageView,club_id: String){
         print("CLICK")
         let userDef = NSUserDefaults.standardUserDefaults()
         let _id_ = userDef.stringForKey("id")
@@ -64,7 +67,7 @@ final class SingletonObject {
                             if ( str?.rangeOfString(",\(club_id),") == nil ){
                                 new_count = label.text!
                                 label.text = "\(Int(new_count)! + 1)"
-                                img.image = UIImage(named: "bg")
+                                img.image = UIImage(named: "active_like-iphone")
                                 new_count2 = "\(Int(new_count)! + 1)"
                             }
                             else {
@@ -93,24 +96,26 @@ final class SingletonObject {
                                 let context:NSManagedObjectContext = appDel.managedObjectContext
                                 let request = NSFetchRequest(entityName: "Place")
                                 
-                                request.returnsObjectsAsFaults = false
+                                let searchPredicate = NSPredicate(format: "SELF.id = %@", club_id)
+                                request.predicate = searchPredicate
                                 
-                                do {
+                                request.returnsObjectsAsFaults = false
+                                do{
                                     let result:NSArray = try context.executeFetchRequest(request)
-                                    
-                                    result[club_number].setValue(Int(new_count2), forKey: "likes");
-                                    
-                                }    catch {
-                                    print("error8: fetch error")
+                                    result[0].setValue(Int(new_count2), forKey: "likes");
+                                    print("CHANGE: \(result[0])")
+                                } catch _ {
+                                    print("ERROR!!")
                                 }
+                                
+                             
                                 
                                 do {
                                     print("start")
                                     try context.save()
-                                    print("change_data: Данные изменены успешно")
+                                    print("like_club: Данные изменены успешно")
                                 } catch _ { print ("error4: Can't save object to core data")}
-                                //self.fetch_request()
-                                ////////
+                                
                             
                             }
                             
@@ -118,8 +123,6 @@ final class SingletonObject {
                             
                             
                         }
-                        
-                        
                     //}
                     //else {
                     //    ("EXCEPTION: CORE DATA IS BUSY")
@@ -169,6 +172,29 @@ final class SingletonObject {
     
     
     ////
+    func old_title(label: UILabel, number: String) {
+        var st = "  лет"
+        var num = Int(number)
+        if (num != nil){
+            if (num! > 20 || num! < 5){
+                num = num! % 10;
+                switch(num!){
+                case 1: st = "  год"
+                case 2,3,4: st = "  года"
+                default: st = "  лет"
+                }
+                
+            }
+            
+        }
+       
+        
+        
+        label.text = number + st
+    }
+    
+    
+    
     
     
 }

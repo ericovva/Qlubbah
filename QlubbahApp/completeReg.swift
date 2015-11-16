@@ -31,9 +31,17 @@ class completeReg: UIViewController {
             if let _data = data {
                 if let data_error: NSData = _data {
                     if let result = NSString(data: data_error, encoding: NSUTF8StringEncoding){
+                        print(result)
                         if let jsonData = result.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: true){
-                            let jsonDict = (try! NSJSONSerialization.JSONObjectWithData(jsonData, options: [])) as! NSDictionary
-                            completion(result: jsonDict)                        }
+                            do {
+                                  let jsonDict = (try NSJSONSerialization.JSONObjectWithData(jsonData, options: [])) as! NSDictionary
+                                completion(result: jsonDict)
+                                
+                            } catch _ {
+                                print("error in !!")
+                            }
+                          
+                                                   }
                         else {
                             print("error3: error in encoding jsonData")
                         }
@@ -82,7 +90,7 @@ class completeReg: UIViewController {
             let url_srt: NSString = "http://qlubbah.ru/api.php?action=active_check&keys=1&code=\(st)";
             let urlStr : NSString = url_srt.stringByAddingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
             if let searchURL : NSURL = NSURL(string: urlStr as String)! {
-                httpRequest(searchURL) {
+                SingletonObject.sharedInstance.httpRequest(searchURL) {
                     (result: NSDictionary) in
                     dispatch_async(dispatch_get_main_queue()) {
                         if let _result:NSDictionary = result{

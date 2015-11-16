@@ -11,7 +11,7 @@ import UIKit
 class Sort: UIViewController {
     @IBOutlet weak var n: UIButton!
     @IBOutlet weak var bg: UIButton!
-    @IBOutlet weak var bm: UIButton!
+   
     @IBOutlet weak var l: UIButton!
     @IBOutlet weak var mc: UIButton!
     @IBOutlet weak var wc: UIButton!
@@ -21,43 +21,68 @@ class Sort: UIViewController {
         navigationController?.popViewControllerAnimated(true)
     }
     @IBAction func name(sender: AnyObject) {
+        high_light(n)
         SingletonObject.sharedInstance.sort = "name"
         navigationController?.popViewControllerAnimated(true)
     }
     @IBAction func likes(sender: AnyObject) {
+        high_light(l)
         SingletonObject.sharedInstance.sort = "likes"
         navigationController?.popViewControllerAnimated(true)
     }
     @IBAction func men(sender: AnyObject) {
+        high_light(bg)
         SingletonObject.sharedInstance.sort = "female"
         navigationController?.popViewControllerAnimated(true)
     }
-    @IBAction func women(sender: AnyObject) {
-        SingletonObject.sharedInstance.sort = "male"
-        navigationController?.popViewControllerAnimated(true)
-    }
+
     @IBAction func age(sender: AnyObject) {
-        SingletonObject.sharedInstance.sort = "age"
+        high_light(mc)
+        SingletonObject.sharedInstance.sort = "people"
         navigationController?.popViewControllerAnimated(true)
     }
     @IBAction func age_female(sender: AnyObject) {
-        SingletonObject.sharedInstance.sort = "age_female"
+        high_light(wc)
+        SingletonObject.sharedInstance.sort = "mid_age"
         navigationController?.popViewControllerAnimated(true)
     }
     @IBAction func people(sender: AnyObject) {
-        SingletonObject.sharedInstance.sort = "people"
+        high_light(c)
+        SingletonObject.sharedInstance.sort = "male"
         navigationController?.popViewControllerAnimated(true)
     }
     
     func bordering(b:UIButton){
         b.layer.borderWidth = 2
+        b.layer.cornerRadius = 7
         b.layer.borderColor = UIColor.yellowColor().CGColor
     }
+    func high_light(button: UIButton){
+        nonLight_all()
+        button.backgroundColor = UIColor.yellowColor()
+        button.setTitleColor(UIColor.blackColor(),forState: UIControlState.Normal)
+        
+    }
+    func nonLight_all(){
+        n.backgroundColor = UIColor.blackColor()
+        n.setTitleColor(UIColor.yellowColor(),forState: UIControlState.Normal)
+        l.backgroundColor = UIColor.blackColor()
+        l.setTitleColor(UIColor.yellowColor(),forState: UIControlState.Normal)
+        bg.backgroundColor = UIColor.blackColor()
+        bg.setTitleColor(UIColor.yellowColor(),forState: UIControlState.Normal)
+        mc.backgroundColor = UIColor.blackColor()
+        mc.setTitleColor(UIColor.yellowColor(),forState: UIControlState.Normal)
+        wc.backgroundColor = UIColor.blackColor()
+        wc.setTitleColor(UIColor.yellowColor(),forState: UIControlState.Normal)
+        c.backgroundColor = UIColor.blackColor()
+        c.setTitleColor(UIColor.yellowColor(),forState: UIControlState.Normal)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         bordering(n)
         bordering(bg)
-        bordering(bm)
+    
         bordering(l)
         bordering(c)
         bordering(wc)
@@ -65,17 +90,14 @@ class Sort: UIViewController {
         switch( SingletonObject.sharedInstance.sort ){
             case "likes": l.backgroundColor = UIColor.yellowColor()
                           l.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-            case "people": c.backgroundColor = UIColor.yellowColor()
-                            c.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
+    
         case "female": bg.backgroundColor = UIColor.yellowColor()
         bg.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        case "male": bm.backgroundColor = UIColor.yellowColor()
-        bm.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        case "age": mc.backgroundColor = UIColor.yellowColor()
+        case "people": mc.backgroundColor = UIColor.yellowColor()
         mc.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        case "age_female": wc.backgroundColor = UIColor.yellowColor()
+        case "mid_age": wc.backgroundColor = UIColor.yellowColor()
         wc.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
-        case "people": c.backgroundColor = UIColor.yellowColor()
+        case "male": c.backgroundColor = UIColor.yellowColor()
         
         c.setTitleColor(UIColor.blackColor(), forState: UIControlState.Normal)
             default: n.backgroundColor = UIColor.yellowColor()

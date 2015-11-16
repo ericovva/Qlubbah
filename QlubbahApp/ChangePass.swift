@@ -15,7 +15,7 @@ class ChangePass: UIViewController {
     @IBOutlet weak var repeat_pass: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-        new_pass.becomeFirstResponder()
+        old_pass.becomeFirstResponder()
         // Do any additional setup after loading the view.
     }
     func error_mess(_title: String,_message: String){

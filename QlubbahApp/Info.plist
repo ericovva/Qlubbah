@@ -45,6 +45,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Разрешить приложению знать ваши координаты? </string>
 </dict>

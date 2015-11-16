@@ -10,6 +10,25 @@ import UIKit
 import CoreData
 import CoreImage
 class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDataSource{
+    var club_number: Int!
+    var search: String = ""
+    var mCount: String!
+    var m5: UIImageView!
+    var m4: UIImageView!
+    var m3: UIImageView!
+    var m2: UIImageView!
+    var likes: String!
+    var m1: UIImageView!
+    //var likeHand: UIImageView!
+    //var likes: UILabel!
+    var womenAge: String!
+    var menAge: String!
+    var women: String!
+    var men: String!
+    var clubName: String!
+    var clubPlace: String!
+   
+    
     var allow_to_send = true
     var comments_massive: NSArray = []
     var update_finished = false
@@ -22,7 +41,7 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
     var mainImage = 0;
     var article: String = ""
     var name:String = ""
-        func fetch_request() {
+    func fetch_request() {
         let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
         let context:NSManagedObjectContext = appDel.managedObjectContext
         let request = NSFetchRequest(entityName: "Photo")
@@ -164,6 +183,7 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
         activeTextField.layer.borderWidth  = 1;
         activeTextField.layer.cornerRadius = 4;
         tableView.tableFooterView = edit_comment_view
+        activeTextField.scrollsToTop = false
         //получить отзывы
         get_comments()
       
@@ -278,8 +298,56 @@ class About: UITableViewController, UICollectionViewDelegate, UICollectionViewDa
             cell0.collectionView.delegate = self
             cell0.collectionView.dataSource = self
             cell0.collectionView.reloadData()
+            cell0.collectionView.scrollsToTop = false
             cell0.activityIndicator.hidden = false
             cell0.activityIndicator.startAnimating()
+            //////////
+            cell0.clubName.text = clubName
+            cell0.mCount.text = mCount
+            SingletonObject.sharedInstance.old_title(cell0.womenAge, number: womenAge)
+            SingletonObject.sharedInstance.old_title(cell0.menAge, number: menAge)
+            //cell0.womenAge.text =  womenAge
+            //cell0.menAge.text = menAge
+            cell0.women.text = women + " %"
+            cell0.men.text = men + " %"
+            cell0.clubPlace.text = clubPlace
+            cell0.search = search
+            cell0.club_number = club_number
+            cell0.club_id  = id
+            cell0._view = self
+            
+            /////////
+            var likees : NSArray = []
+            let appDel: AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+            let context:NSManagedObjectContext = appDel.managedObjectContext
+            let request = NSFetchRequest(entityName: "Place")
+            let predicate = NSPredicate(format: "id == %@", id)
+            request.predicate  = predicate
+            request.returnsObjectsAsFaults = false
+            do{
+                likees = try context.executeFetchRequest(request)
+                //print(core_data_image_result);
+            }catch {
+                print("error: 0: fetch error")
+            }
+            if let l = likees[0].valueForKey("likes") {
+                cell0.likes.text = "\(l)"
+            }
+            
+            //////cell0.likes.text = likes
+            
+            let userDef = NSUserDefaults.standardUserDefaults()
+            if userDef.boolForKey("auth"){
+                let was_liked = userDef.stringForKey("likes_list")
+                
+                if (was_liked!.rangeOfString("," + id + ",") != nil){
+                    cell0.like_hand_image_in_list.image = UIImage(named: "active_like-iphone")
+                }
+                else {
+                    cell0.like_hand_image_in_list.image = UIImage(named: "like")
+                }
+            }
+            ////////////////
             if (update_finished){
                 if let imgData = core_data_image_result[mainImage].valueForKey("img"){
                     cell0.img.image = UIImage(data: imgData as! NSData)

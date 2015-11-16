@@ -11,6 +11,7 @@ import UIKit
 class ClubTableViewCell: UITableViewCell {
     var club_id: String!
     var club_number: Int!
+    var search: String!
     @IBOutlet weak var like_hand_image_in_list: UIImageView!
     var _view: UIViewController!
     @IBOutlet weak var mCount: UILabel!
@@ -38,7 +39,7 @@ class ClubTableViewCell: UITableViewCell {
         if (Reachability.isConnectedToNetwork()){
             if (userDef.boolForKey("auth")){
                 
-                SingletonObject.sharedInstance.like_club(club_number, label: likes, img: likeHand, club_id: club_id)
+                SingletonObject.sharedInstance.like_club(likes, img: likeHand, club_id: club_id)
                 
             }
             else {

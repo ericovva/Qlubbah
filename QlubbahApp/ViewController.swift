@@ -38,7 +38,7 @@ class ViewController: UIViewController {
         self.yourNightVision.alpha = 0;
         //self.alphaView.alpha = 0;
         
-        UIView.animateWithDuration(1){
+        UIView.animateWithDuration(4){
             self.enter.alpha = 0.85;
             self.reg.alpha = 0.85;
             self.qlubbah.center.y = 140;

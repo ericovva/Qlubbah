@@ -13,7 +13,10 @@ class MyNumber: UIViewController {
     @IBOutlet weak var phone: UITextField!
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.navigationController!.navigationBar.barStyle = UIBarStyle.Black
+        self.navigationController!.navigationBar.tintColor = UIColor.yellowColor()
+        self.phone.keyboardType = UIKeyboardType.PhonePad
+        self.phone.becomeFirstResponder()
         // Do any additional setup after loading the view.
     }
 
